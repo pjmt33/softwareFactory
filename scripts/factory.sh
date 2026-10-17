@@ -29,7 +29,7 @@ audit() {
       for g in 01-product 02-architecture 03-program-design; do
         [ -f "$d/$g.md" ] || yellow "    missing $g.md (gate may not be reached)"
       done
-      [ -f "$d/00-status.md" ] && grep -E '^(feature|gate-|slice-|next:)' "$d/00-status.md" | sed 's/^/    /'
+      [ -f "$d/00-status.md" ] && grep -E '^(- )?(Gate|Slice|feature|gate-|slice-|next:)' "$d/00-status.md" | sed 's/^/    /'
     done < <(find docs/plans -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
   else
     echo "  (no feature plans yet)"
