@@ -34,8 +34,8 @@ do is a failure.
 4. Approval = the user clearly says yes / approve / continue. Anything else:
    revise the doc, re-ask.
 5. On approval: mark the gate APPROVED in `00-status.md`, move on.
-7. **Stop after the ask.** Do not plan past the current gate. Do not describe what Gate N+1 will do.
-6. **Backtracking:** if a later gate reveals an earlier decision is wrong, stop,
+6. **Stop after the ask.** Do not plan past the current gate. Do not describe what Gate N+1 will do.
+7. **Backtracking:** if a later gate reveals an earlier decision is wrong, stop,
    update the earlier doc, set that gate back to "in progress", re-approval before continuing.
 
 ## Standing rules (always on)
