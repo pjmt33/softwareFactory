@@ -79,6 +79,7 @@ init_feature() {
   [ -e "$d" ] && { red "exists: $d"; exit 2; }
   mkdir -p "$d"
   cp references/status-template.md "$d/00-status.md"
+  sed -i '' "s/<feature name>/$slug/" "$d/00-status.md"
   green "created $d/00-status.md"
 }
 

@@ -23,12 +23,18 @@ Copy `references/status-template.md` to `docs/plans/<slug>/00-status.md` before 
 Mark gates APPROVED and check slices off as you go. That file is the resume anchor.
 
 ## Approval protocol (run at every gate)
+
+Do not narrate what you are about to do. Do the work in the response: ask the
+questions, draft the doc, present the summary. A numbered plan of what you will
+do is a failure.
+
 1. Write the gate doc to disk.
 2. Present at most 5-10 bullet decisions plus the doc path. Do not paste the whole doc.
 3. Ask exactly: "Approve Gate N, or what should change?"
 4. Approval = the user clearly says yes / approve / continue. Anything else:
    revise the doc, re-ask.
 5. On approval: mark the gate APPROVED in `00-status.md`, move on.
+7. **Stop after the ask.** Do not plan past the current gate. Do not describe what Gate N+1 will do.
 6. **Backtracking:** if a later gate reveals an earlier decision is wrong, stop,
    update the earlier doc, set that gate back to "in progress", re-approval before continuing.
 

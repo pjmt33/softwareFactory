@@ -1,4 +1,4 @@
-# Status: <feature name>
+# Status: _smoke-test
 
 - Gate 1 — Product: pending | in progress | APPROVED <date>
 - Gate 2 — Architecture: pending | in progress | APPROVED <date>
