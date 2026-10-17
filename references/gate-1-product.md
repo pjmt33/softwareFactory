@@ -11,7 +11,7 @@ Do not invent answers. Do not draft the template until the user has answered
 all four. If the user's answer is vague, ask a follow-up before proceeding.
 
 
-Work with the user to fill this template. Save to `docs/plans/<slug>/01-product.md`.
+After the user has answered all four, record their answers in the template below and save to `docs/plans/<slug>/01-product.md`.
 
     # Product: <feature name>
 
