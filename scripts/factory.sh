@@ -30,6 +30,13 @@ audit() {
         [ -f "$d/$g.md" ] || yellow "    missing $g.md (gate may not be reached)"
       done
       [ -f "$d/00-status.md" ] && grep -E '^(- )?(Gate|Slice|feature|gate-|slice-|next:)' "$d/00-status.md" | sed 's/^/    /'
+      if [ -f "$d/00-status.md" ] &&
+         grep -Eq '^- Gate 4 — Slice plan: APPROVED([[:space:]]|$)' "$d/00-status.md"; then
+        [ -f "$d/04-slices.md" ] || {
+          red "    MISSING 04-slices.md (Gate 4 is approved)"
+          fail=1
+        }
+      fi
     done < <(find docs/plans -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
   else
     echo "  (no feature plans yet)"
@@ -75,6 +82,10 @@ check_skill_inner() {
 init_feature() {
   local slug="${1:-}"
   [ -n "$slug" ] || { red "usage: factory.sh init-feature <slug>"; exit 2; }
+  if ! [[ "$slug" =~ ^[a-z][a-z0-9-]{0,63}$ ]]; then
+    red "invalid slug: '$slug' — must match ^[a-z][a-z0-9-]{0,63}\$"
+    exit 2
+  fi
   local d="docs/plans/$slug"
   [ -e "$d" ] && { red "exists: $d"; exit 2; }
   mkdir -p "$d"
@@ -97,8 +108,14 @@ resume() {
 }
 
 case "$cmd" in
-  audit)        audit ;;
-  check-skill)  hdr "skill hygiene"; check_skill_inner; echo; green "done" ;;
+  audit)        audit; exit $? ;;
+  check-skill)
+    hdr "skill hygiene"
+    check_skill_inner; rc=$?
+    echo
+    [ "$rc" -eq 0 ] && green "done" || red "check-skill failed"
+    exit "$rc"
+    ;;
   init-feature) init_feature "${1:-}" ;;
   resume)       resume ;;
   *) echo "usage: factory.sh {audit|check-skill|init-feature <slug>|resume}"; exit 2 ;;
