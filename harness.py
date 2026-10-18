@@ -6,6 +6,15 @@ U = "http://localhost:11434/api/chat"
 M = "qwen3:8b"
 R = Path("/Volumes/dbdata/softwareFactory")
 
+ANSWER_LINES = []  # populated by main() if --answer-file is given
+
+def get_answer(prompt):
+    if ANSWER_LINES:
+        line = ANSWER_LINES.pop(0)
+        print(f"{prompt}{line}", file=sys.stderr)
+        return line
+    return input(prompt)
+
 TOOLS = [
     {"type": "function", "function": {"name": "read_file", "description": "Read a file",
         "parameters": {"type": "object", "properties": {"path": {"type": "string"}}, "required": ["path"]}}},
@@ -64,7 +73,7 @@ def run(gate_ref, status, task):
                 asked = True
                 print(f"\n[model asks]\n{content}\n", file=sys.stderr)
                 try:
-                    ans = input("Your answer (blank to accept final output): ").strip()
+                    ans = get_answer("Your answer (blank to accept final output): ").strip()
                 except EOFError:
                     ans = ""
                 if ans:
@@ -105,6 +114,12 @@ def run(gate_ref, status, task):
     return "ERROR: max turns exceeded"
 
 if __name__ == "__main__":
-    if len(sys.argv) < 4:
-        print("Usage: harness.py <gate_ref> <status> <task>"); sys.exit(1)
-    print("\n=== FINAL OUTPUT ===\n" + run(sys.argv[1], sys.argv[2], sys.argv[3]))
+    args = sys.argv[1:]
+    if "--answer-file" in args:
+        idx = args.index("--answer-file")
+        path = args[idx + 1]
+        ANSWER_LINES.extend(Path(path).read_text(encoding="utf-8").splitlines())
+        del args[idx:idx + 2]
+    if len(args) < 3:
+        print("Usage: harness.py <gate_ref> <status> <task> [--answer-file <path>]"); sys.exit(1)
+    print("\n=== FINAL OUTPUT ===\n" + run(args[0], args[1], args[2]))
