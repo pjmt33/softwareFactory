@@ -1,3 +1,12 @@
+BEFORE presenting the template, propose the types and method signatures
+below, then ask the user:
+  1. Do these signatures match your expectations? Which should change?
+  2. Are there types or files I've missed?
+  3. What are the three least-confident decisions?
+
+Do not implement bodies. Do not write any code. Present signatures only.
+Do not draft the template until the user has responded to all three.
+
 # Gate 3 — Program Design (the step everyone skips)
 
 Read the approved product and architecture documents and inspect the relevant

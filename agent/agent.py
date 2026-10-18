@@ -171,7 +171,7 @@ def factory_tools(include_write: bool, include_bash: bool):
     tools.append({
         "type": "function",
         "function": {
-            "name": "respond",
+            "name": "respond__disabled",
             "description": "Send a plain-text response to the user. Use this instead of producing bare assistant text when tools are available. This keeps the model in structured mode so guardrails apply.",
             "parameters": {
                 "type": "object",
@@ -291,7 +291,7 @@ def execute_tool(name: str, args: dict, session: Session, explicit_approval: boo
             ledger("tool_bash", cmd=args["cmd"], rc=r.returncode)
             return out or f"(no output, rc={r.returncode})"
 
-        if name == "respond":
+        if name == "respond__disabled":
             session.tool_call(name, args, args["message"], True)
             return args["message"]
 
@@ -301,14 +301,9 @@ def execute_tool(name: str, args: dict, session: Session, explicit_approval: boo
         session.error("tool_exec", f"{name}: {e}", "returned error to model")
         return f"ERROR: {e}"
 
-SYSTEM_PROMPT = """You are the Software Factory local agent. Follow MANUAL.md, SKILL.md, and the gate references.
-
-Use the full conversation supplied by the client. At the start of each gate, read that gate's reference and relevant plan/status documents. For Gate 1, ask its four required questions verbatim. For Gates 2–4, inspect the required context, then ask focused clarifying questions in one message and wait for the user's answers before drafting. Do not invent answers.
-
-Planning writes may only target docs/plans/<active-slug>/. Never mark a gate approved unless the current user turn explicitly approves it. Do not write implementation files or run commands before Gate 4 is approved in the active plan status. Shell access, when available, is limited to the allowlisted read-only commands.
-
-When you want to speak to the user, call the `respond` tool. When you need a file, call `read_file`. Never produce bare assistant text when a tool would do.
-"""
+SYSTEM_PROMPT = """You are a file-reading agent. Your ONLY tool is read_file.
+When the user says "Begin Gate 1", your FIRST action must be read_file(path="references/gate-1-product.md").
+Do not talk. Do not ask questions. Call read_file."""
 
 def _is_explicit_approval(messages):
     users = [m.get("content", "").strip() for m in messages if m.get("role") == "user"]
@@ -380,7 +375,7 @@ def run_loop(session: Session, conversation: list, max_steps: int, explicit_appr
                     args = {}
             result = execute_tool(name, args, session, explicit_approval)
             messages.append({"role": "tool", "tool_name": name, "content": str(result)})
-            if name == "respond":
+            if name == "respond__disabled":
                 session.message("assistant", str(result))
                 ledger("turn_end", steps=step)
                 return str(result)

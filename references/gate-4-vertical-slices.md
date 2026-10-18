@@ -1,3 +1,10 @@
+BEFORE any code, present the slice plan as numbered one-liners and ask:
+  1. Is this the right slice order?
+  2. Should slice 1 be smaller or larger?
+  3. Any slices missing or wrongly grouped?
+
+Do not start coding until the slice plan is approved.
+
 # Gate 4 — Vertical Slices (tracer bullets)
 
 Read the approved product, architecture, and program-design documents, plus the
