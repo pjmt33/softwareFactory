@@ -5026,3 +5026,11 @@ ordered by sequence of work, not by clock time.
 ## Superseded
 
 - Earlier advice to `rm ~/.poseidon/sessions.db` when the harness misbehaves. Superseded: back up first, prefer a fresh session or targeted row deletion.
+
+## State snapshot — 2026-10-18T10:37Z
+
+- Commit: b3f59ee — chore(plans): mark _smoke-test as internal validation artifactcd
+- Audit: PASS
+- Skill: PASS
+- Agent: not running
+- Features: 2 pending (gate-preambles, _smoke-test)
