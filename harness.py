@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, sys, urllib.request
+import json, re, sys, urllib.request
 from pathlib import Path
 
 U = "http://localhost:11434/api/chat"
@@ -49,6 +49,12 @@ def run(gate_ref, status, task):
         tcs = msg.get("tool_calls") or []
         if not tcs:
             content = msg.get("content", "").strip()
+            if re.search(r"<[a-z]", content):
+                messages.append({"role": "assistant", "content": content})
+                messages.append({"role": "user", "content":
+                    "You output the unfilled template. Do not output the template. "
+                    "Ask the four clarifying questions first, then write the doc with real content."})
+                continue
             if any(w in content.lower() for w in ["approved", "protocol complete", "completes the gate"]):
                 messages.append({"role": "assistant", "content": content})
                 messages.append({"role": "user", "content":
@@ -67,6 +73,12 @@ def run(gate_ref, status, task):
                     continue
             return content
         messages.append(msg)
+        if len(read_cache) >= 2 and not asked and turn >= 2:
+            messages.append({"role": "user", "content":
+                "You have read the gate reference and the product doc. STOP. "
+                "Output the four Gate 2 questions as plain text now. Do not call any tool."})
+            no_tools = True
+            continue
         for tc in tcs:
             fn = tc.get("function", {})
             name, args = fn.get("name"), fn.get("arguments", {})
