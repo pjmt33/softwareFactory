@@ -10,4 +10,4 @@
 - [ ] Slice 2 — <one line>
 
 ## Notes for a fresh session
-<anything decided in chat that a new session must know>
+Internal validation artifact. Do not advance this feature. Use as a template for the shape of a fresh status file.
