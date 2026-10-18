@@ -5051,3 +5051,16 @@ ordered by sequence of work, not by clock time.
 - Reliable pattern: `python3 - <<'PY' ... PY` with a triple-quoted string. Shell does not interpret the content.
 - Symptom: zsh shows `cmdand heredoc>` and waits for more input; nothing is written.
 - Recovery: Ctrl-C, delete any partial file, use the Python pattern.
+
+## gate-preambles shipped — 2026-10-18T14:19Z
+
+- First feature processed through all four gates end-to-end.
+- Gate 1 approved: 44a4e3a
+- Gate 2 approved: c0eedf9
+- Gate 3 approved: 64ffd07
+- Gate 4 approved: 31cc1ac
+- Preambles added to gate-2, gate-3, gate-4 references: 7a03b1a
+- Slices checked off: fdef6ad
+- All four gate refs now have explicit numbered ask-first preambles.
+- check-skill green, audit OK.
+- The factory works. The next feature starts at Gate 1.
