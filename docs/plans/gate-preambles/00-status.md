@@ -6,8 +6,8 @@
 - Gate 4 — Slice plan: APPROVED 2026-10-18
 
 ## Slices
-- [ ] Slice 1 — tracer bullet: <one line>
-- [ ] Slice 2 — <one line>
+- [x] Slice 1 — Gate 2 preamble
+- [x] Slice 2 — Gate 3 preamble
 
 ## Notes for a fresh session
 <anything decided in chat that a new session must know>
