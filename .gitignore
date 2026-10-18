@@ -12,3 +12,4 @@ agent/data/incidents/
 agent/agent.py.bak.*
 
 agent/agent.py.bak.*
+.aider*
