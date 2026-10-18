@@ -5044,3 +5044,10 @@ ordered by sequence of work, not by clock time.
 - Findings: model asks the four verbatim questions via inline prompt (ollama run);
   agent tool-calling against qwen2.5:latest remains unreliable through the harness;
   manual pattern is the proven path.
+
+## Heredoc fragility — 2026-10-18T14:16Z
+
+- Long `cat > file <<'EOF'` blocks fail in interactive zsh when content contains backticks or multiline markdown.
+- Reliable pattern: `python3 - <<'PY' ... PY` with a triple-quoted string. Shell does not interpret the content.
+- Symptom: zsh shows `cmdand heredoc>` and waits for more input; nothing is written.
+- Recovery: Ctrl-C, delete any partial file, use the Python pattern.
