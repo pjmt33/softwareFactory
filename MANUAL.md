@@ -114,3 +114,13 @@ invoke a shell and rejects commands outside its allowlist.
 For agent behavior, follow `SKILL.md` and the referenced gate documents. This
 manual is an operator overview; if it conflicts with those workflow
 instructions, follow the skill and gate references and update the manual.
+
+
+## Execution (Intel Mac, CPU-only)
+
+Use Aider in `ask` mode for gate discussions. It will not edit files until you switch to `code` mode.
+
+- Model: `qwen2.5-coder:3b` (7B+ is too slow on CPU)
+- Gate 1–3 discussion: `aider --model ollama_chat/qwen2.5-coder:3b --chat-mode ask`
+- Gate 4 slice execution: `aider --model ollama_chat/qwen2.5-coder:3b --chat-mode code`
+- Do NOT use Poseidon (retired) or the archived Flask agent.
