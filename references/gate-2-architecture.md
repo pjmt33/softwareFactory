@@ -1,7 +1,12 @@
 # Gate 2 — Architecture
 
-Read the relevant existing code before writing this doc — never design against
-an imagined codebase. Save to `docs/plans/<slug>/02-architecture.md`.
+Read the relevant existing code and the approved product document before
+writing — never design against an imagined codebase. Identify missing decisions
+about system fit, endpoints, data, flow, and external dependencies. Ask the user
+focused clarifying questions in one message and wait for their answers before
+drafting; do not invent requirements or duplicate information already settled
+in Gate 1. Save the approved draft to
+`docs/plans/<slug>/02-architecture.md`.
 
     # Architecture: <feature name>
 

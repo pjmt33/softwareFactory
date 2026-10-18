@@ -1,0 +1,485 @@
+#!/usr/bin/env python3
+"""Software Factory local agent.
+
+Transport fix: when tools are present, call Ollama's native /api/chat
+(non-streaming) instead of the /v1 shim, because the shim silently drops
+tool_calls from streamed responses.
+
+Parsing: agent-tool-parser handles Qwen XML, Hermes XML, fenced JSON, and
+malformed-JSON repair.
+
+Guardrails: retry-nudge when the model returns text but tools are expected.
+
+Ledger: every run, message, tool call, error, and incident is appended to
+agent/data/ as JSONL. Session state separately records the active plan slug.
+"""
+import json
+import re
+import shlex
+import hashlib
+import time
+import logging
+from datetime import datetime, timezone
+from pathlib import Path
+from threading import Lock
+
+import requests
+from flask import Flask, request, jsonify
+
+try:
+    from agent_tool_parser import try_parse_tool_calls
+except ImportError:
+    try_parse_tool_calls = None
+
+ROOT = Path(__file__).resolve().parent
+DATA = ROOT / "data"
+LEDGER = DATA / "ledger"
+SESSIONS = DATA / "sessions"
+INCIDENTS = DATA / "incidents"
+LOGS = ROOT / "logs"
+for d in (LEDGER, SESSIONS, INCIDENTS, LOGS):
+    d.mkdir(parents=True, exist_ok=True)
+
+CONFIG = json.loads((ROOT / "config.json").read_text())
+APP = Flask(__name__)
+
+logging.basicConfig(
+    level=getattr(logging, CONFIG["log_level"]),
+    format="%(asctime)s %(levelname)s %(message)s",
+    handlers=[
+        logging.FileHandler(LOGS / "agent.log"),
+        logging.StreamHandler(),
+    ],
+)
+log = logging.getLogger("agent")
+
+_write_lock = Lock()
+
+def _now():
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+def _append_jsonl(path: Path, record: dict):
+    record = {"ts": _now(), **record}
+    with _write_lock:
+        with path.open("a") as f:
+            f.write(json.dumps(record) + "\n")
+
+def _append_text(path: Path, text: str):
+    with _write_lock:
+        with path.open("a") as f:
+            f.write(text.rstrip() + "\n")
+
+def ledger(event: str, **fields):
+    _append_jsonl(LEDGER / "runs.jsonl", {"event": event, **fields})
+
+def incident(kind: str, detail: str, fix: str = ""):
+    block = f"\n## {_now()} - {kind}\n- detail: {detail}\n- fix: {fix}\n"
+    _append_text(INCIDENTS / "incidents.md", block)
+
+class Session:
+    def __init__(self, session_id: str):
+        self.id = session_id
+        self.dir = SESSIONS / session_id
+        self.dir.mkdir(parents=True, exist_ok=True)
+        self.messages = self.dir / "messages.jsonl"
+        self.tool_calls = self.dir / "tool_calls.jsonl"
+        self.errors = self.dir / "errors.jsonl"
+        self.state = self.dir / "state.json"
+        state = json.loads(self.state.read_text()) if self.state.exists() else {}
+        self.plan_slug = state.get("plan_slug")
+
+    def set_plan_slug(self, slug: str):
+        self.plan_slug = slug
+        self.state.write_text(json.dumps({"plan_slug": slug}))
+
+    def message(self, role: str, content: str, **extra):
+        _append_jsonl(self.messages, {"role": role, "content": content, **extra})
+
+    def tool_call(self, name: str, args: dict, result: str, ok: bool):
+        _append_jsonl(self.tool_calls, {
+            "name": name, "args": args, "result": result, "ok": ok
+        })
+
+    def error(self, kind: str, detail: str, action: str):
+        _append_jsonl(self.errors, {"kind": kind, "detail": detail, "action": action})
+
+def session_id_for(conversation_id: str):
+    return hashlib.sha256(conversation_id.encode("utf-8")).hexdigest()
+
+def call_ollama_native(messages, tools):
+    body = {
+        "model": CONFIG["model"],
+        "messages": messages,
+        "stream": False,
+        "options": {"num_ctx": CONFIG["context_window"]},
+    }
+    if tools:
+        body["tools"] = tools
+    resp = requests.post(CONFIG["ollama_native_url"], json=body, timeout=300)
+    resp.raise_for_status()
+    return resp.json()
+
+def factory_tools(include_write: bool, include_bash: bool):
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "read_file",
+                "description": "Read a UTF-8 text file inside the repo. Use when the task requires the contents of a specific file (gate reference, MANUAL.md, plan doc). No side effects.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "path": {
+                            "type": "string",
+                            "description": "Repo-relative path, e.g. references/gate-1-product.md",
+                        }
+                    },
+                    "required": ["path"],
+                },
+            },
+        }
+    ]
+    if include_write:
+        tools.append({
+            "type": "function",
+            "function": {
+                "name": "write_file",
+                "description": "Write a UTF-8 text file inside the repo. Before Gate 4 approval, only gate plan artifacts under docs/plans/<slug>/ are writable; status approvals require the user's explicit approval in this turn. After Gate 4 approval, implementation files may be written.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "path": {"type": "string"},
+                        "content": {"type": "string"},
+                    },
+                    "required": ["path", "content"],
+                },
+            },
+        })
+    if include_bash:
+        tools.append({
+            "type": "function",
+            "function": {
+                "name": "run_bash",
+                "description": "Run an allowlisted read-only inspection or test command inside the repo. Available only after Gate 4 is approved.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {"cmd": {"type": "string"}},
+                    "required": ["cmd"],
+                },
+            },
+        })
+    tools.append({
+        "type": "function",
+        "function": {
+            "name": "respond",
+            "description": "Send a plain-text response to the user. Use this instead of producing bare assistant text when tools are available. This keeps the model in structured mode so guardrails apply.",
+            "parameters": {
+                "type": "object",
+                "properties": {"message": {"type": "string"}},
+                "required": ["message"],
+            },
+        },
+    })
+    return tools
+
+REPO_ROOT = ROOT.parent
+
+def _safe_repo_path(p: str) -> Path:
+    p = p.lstrip("/")
+    root = REPO_ROOT.resolve()
+    full = (root / p).resolve()
+    if root not in full.parents and full != root:
+        raise ValueError(f"path outside repo: {p}")
+    return full
+
+def _gate4_approved(session: Session):
+    if not session.plan_slug:
+        return False
+    status = REPO_ROOT / "docs" / "plans" / session.plan_slug / "00-status.md"
+    if not status.is_file():
+        return False
+    return any(
+        re.match(r"^\s*-\s*Gate 4\b.*\bAPPROVED\b", line)
+        for line in status.read_text().splitlines()
+    )
+
+def _allowlisted_command(command: str):
+    try:
+        parts = shlex.split(command)
+    except ValueError:
+        return False
+    if not parts or any(token in {";", "&&", "||", "|", ">", "<", "`"} for token in parts):
+        return False
+    allowed_exact = {
+        ("git", "status"),
+        ("git", "status", "--short"),
+        ("git", "diff", "--check"),
+        ("scripts/factory.sh", "audit"),
+        ("scripts/factory.sh", "check-skill"),
+        ("scripts/factory.sh", "resume"),
+        ("pytest",),
+    }
+    if tuple(parts) in allowed_exact:
+        return True
+    return (
+        len(parts) == 2
+        and parts[0] == "pytest"
+        and parts[1].endswith(".py")
+        and ".." not in Path(parts[1]).parts
+        and _safe_repo_path(parts[1]).is_file()
+    )
+
+def _parser_arguments(args):
+    if isinstance(args, dict) and set(args) == {"arg0"} and isinstance(args["arg0"], dict):
+        return args["arg0"]
+    return args
+
+def execute_tool(name: str, args: dict, session: Session, explicit_approval: bool):
+    try:
+        if name == "read_file":
+            path = _safe_repo_path(args["path"])
+            content = path.read_text()
+            match = re.fullmatch(r"docs/plans/([a-z][a-z0-9-]{0,63})/00-status\.md", args["path"])
+            if match:
+                session.set_plan_slug(match.group(1))
+            session.tool_call(name, args, content[:200], True)
+            ledger("tool_read", path=path.relative_to(REPO_ROOT.resolve()).as_posix(), bytes=len(content))
+            return content
+
+        if name == "write_file":
+            path = _safe_repo_path(args["path"])
+            relative = path.relative_to(REPO_ROOT.resolve())
+            is_plan_artifact = (
+                len(relative.parts) >= 3
+                and relative.parts[0] == "docs"
+                and relative.parts[1] == "plans"
+                and session.plan_slug == relative.parts[2]
+            )
+            gate4_approved = _gate4_approved(session)
+            if not (is_plan_artifact or gate4_approved):
+                raise PermissionError("writes outside the active plan require Gate 4 approval")
+            if relative.name == "00-status.md" and not explicit_approval:
+                prior_status = path.read_text() if path.exists() else ""
+                new_status = args["content"]
+                approval_pattern = re.compile(r"^\s*-\s*Gate ([1-4])\b.*\bAPPROVED\b", re.MULTILINE)
+                added_approval = bool(
+                    set(approval_pattern.findall(new_status))
+                    - set(approval_pattern.findall(prior_status))
+                )
+                if added_approval or (path.exists() and new_status != prior_status):
+                    raise PermissionError("status changes require the user's explicit approval in this turn")
+            path.parent.mkdir(parents=True, exist_ok=True)
+            prior = path.read_text() if path.exists() else None
+            _append_jsonl(LEDGER / "writes.jsonl", {
+                "path": relative.as_posix(),
+                "prior": prior, "new": args["content"],
+            })
+            path.write_text(args["content"])
+            session.tool_call(name, args, "written", True)
+            return f"wrote {relative.as_posix()}"
+
+        if name == "run_bash":
+            import subprocess
+            if not _gate4_approved(session):
+                raise PermissionError("shell commands require Gate 4 approval in the active plan")
+            if not _allowlisted_command(args["cmd"]):
+                raise PermissionError("command is not on the read-only allowlist")
+            r = subprocess.run(shlex.split(args["cmd"]), shell=False, cwd=REPO_ROOT,
+                               capture_output=True, text=True, timeout=120)
+            out = (r.stdout or "") + (r.stderr or "")
+            session.tool_call(name, args, out[:200], r.returncode == 0)
+            ledger("tool_bash", cmd=args["cmd"], rc=r.returncode)
+            return out or f"(no output, rc={r.returncode})"
+
+        if name == "respond":
+            session.tool_call(name, args, args["message"], True)
+            return args["message"]
+
+        raise ValueError(f"unknown tool: {name}")
+    except Exception as e:
+        session.tool_call(name, args, str(e), False)
+        session.error("tool_exec", f"{name}: {e}", "returned error to model")
+        return f"ERROR: {e}"
+
+SYSTEM_PROMPT = """You are the Software Factory local agent. Follow MANUAL.md, SKILL.md, and the gate references.
+
+Use the full conversation supplied by the client. At the start of each gate, read that gate's reference and relevant plan/status documents. For Gate 1, ask its four required questions verbatim. For Gates 2–4, inspect the required context, then ask focused clarifying questions in one message and wait for the user's answers before drafting. Do not invent answers.
+
+Planning writes may only target docs/plans/<active-slug>/. Never mark a gate approved unless the current user turn explicitly approves it. Do not write implementation files or run commands before Gate 4 is approved in the active plan status. Shell access, when available, is limited to the allowlisted read-only commands.
+
+When you want to speak to the user, call the `respond` tool. When you need a file, call `read_file`. Never produce bare assistant text when a tool would do.
+"""
+
+def _is_explicit_approval(messages):
+    users = [m.get("content", "").strip() for m in messages if m.get("role") == "user"]
+    assistants = [m.get("content", "").strip() for m in messages if m.get("role") == "assistant"]
+    if not users or not assistants:
+        return False
+    latest_user = users[-1]
+    prior_assistant = assistants[-1].lower()
+    return (
+        bool(re.fullmatch(r"(yes|approve|approved|continue|approve gate [1-4]|approve the slice plan)[.! ]*", latest_user, re.IGNORECASE))
+        and "approve" in prior_assistant
+    )
+
+def run_loop(session: Session, conversation: list, max_steps: int, explicit_approval: bool):
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages.extend(
+        {"role": m["role"], "content": m["content"]}
+        for m in conversation
+        if m["role"] in {"user", "assistant"}
+    )
+    latest_user = next(m["content"] for m in reversed(conversation) if m["role"] == "user")
+    session.message("user", latest_user)
+    gate4_approved = _gate4_approved(session)
+    tools = factory_tools(include_write=True, include_bash=gate4_approved)
+    no_tool_call_retries = 0
+
+    for step in range(1, max_steps + 1):
+        raw = call_ollama_native(messages, tools)
+        msg = raw.get("message", {})
+        content = msg.get("content", "")
+        tool_calls = msg.get("tool_calls") or []
+
+        if not tool_calls and try_parse_tool_calls and content:
+            parsed = try_parse_tool_calls(content) or []
+            if parsed:
+                log.info("parsed %d tool calls from text", len(parsed))
+                tool_calls = [
+                    {"function": {"name": p.name, "arguments": _parser_arguments(p.args)}}
+                    for p in parsed
+                ]
+
+        if not tool_calls:
+            if CONFIG["trust_text_when_tools_present"]:
+                session.message("assistant", content)
+                return content
+            no_tool_call_retries += 1
+            log.warning("model produced text with tools present; nudging")
+            session.error("no_tool_call", content[:200], "nudge")
+            if no_tool_call_retries >= CONFIG["max_retries"]:
+                ledger("turn_error", session=session.id, reason="no_tool_call")
+                raise RuntimeError(
+                    f"model did not call a tool after {no_tool_call_retries} attempts"
+                )
+            messages.append({"role": "assistant", "content": content})
+            messages.append({"role": "user", "content": "Use the `respond` tool to speak, or the appropriate tool to act. Do not produce bare text."})
+            continue
+
+        no_tool_call_retries = 0
+        messages.append({"role": "assistant", "content": content, "tool_calls": tool_calls})
+        for tc in tool_calls:
+            fn = tc.get("function", {})
+            name = fn.get("name")
+            args = fn.get("arguments")
+            if isinstance(args, str):
+                try:
+                    args = json.loads(args)
+                except json.JSONDecodeError:
+                    session.error("bad_args", args, "tried repair")
+                    args = {}
+            result = execute_tool(name, args, session, explicit_approval)
+            messages.append({"role": "tool", "tool_name": name, "content": str(result)})
+            if name == "respond":
+                session.message("assistant", str(result))
+                ledger("turn_end", steps=step)
+                return str(result)
+
+    session.error("max_steps", f"hit {max_steps}", "returning an error response")
+    ledger("turn_error", session=session.id, reason="max_steps")
+    raise RuntimeError(f"agent exceeded max_steps_per_turn ({max_steps})")
+
+@APP.route("/v1/chat/completions", methods=["POST"])
+def chat_completions():
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict) or not isinstance(body.get("messages"), list):
+        return jsonify({"error": {"message": "messages must be an array", "type": "invalid_request_error"}}), 400
+    incoming = body["messages"]
+    if not incoming or not any(isinstance(m, dict) and m.get("role") == "user" for m in incoming):
+        return jsonify({"error": {"message": "at least one user message is required", "type": "invalid_request_error"}}), 400
+    if any(
+        not isinstance(m, dict)
+        or m.get("role") not in {"user", "assistant", "system", "developer"}
+        or not isinstance(m.get("content"), str)
+        for m in incoming
+    ):
+        return jsonify({"error": {"message": "messages must contain supported roles and string content", "type": "invalid_request_error"}}), 400
+    conversation = [m for m in incoming if m["role"] in {"user", "assistant"}]
+    conversation_id = request.headers.get("X-Conversation-ID") or body.get("conversation_id")
+    if not conversation_id:
+        first_user = next(m["content"] for m in conversation if m["role"] == "user")
+        identity = str(body.get("user", ""))
+        conversation_id = "derived:" + hashlib.sha256(f"{identity}\0{first_user}".encode("utf-8")).hexdigest()
+    if not isinstance(conversation_id, str) or not conversation_id or len(conversation_id) > 256:
+        return jsonify({"error": {"message": "conversation_id must be a non-empty string of at most 256 characters", "type": "invalid_request_error"}}), 400
+    session = Session(session_id_for(conversation_id))
+    explicit_approval = _is_explicit_approval(conversation)
+    ledger(
+        "chat_request",
+        session=session.id,
+        turns=len(conversation),
+        client_tools_present=bool(body.get("tools")),
+        gate4_approved=_gate4_approved(session),
+    )
+    try:
+        answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+    except Exception as e:
+        log.exception("loop failed")
+        incident("loop_failure", str(e), "check logs/agent.log")
+        return jsonify({"error": {"message": str(e), "type": "agent_error"}, "conversation_id": conversation_id}), 502
+
+    return jsonify({
+        "id": f"chatcmpl-{session.id}",
+        "object": "chat.completion",
+        "created": int(time.time()),
+        "model": CONFIG["model"],
+        "conversation_id": conversation_id,
+        "choices": [{"index": 0,
+                     "message": {"role": "assistant", "content": answer},
+                     "finish_reason": "stop"}],
+        "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+    })
+
+@APP.route("/health", methods=["GET"])
+def health():
+    try:
+        r = requests.get(f"{CONFIG['ollama_openai_url']}/models", timeout=5)
+        upstream_ok = r.status_code == 200
+    except Exception:
+        upstream_ok = False
+    return jsonify({
+        "status": "ok" if upstream_ok else "upstream_unreachable",
+        "model": CONFIG["model"],
+        "upstream": upstream_ok,
+        "sessions": len(list(SESSIONS.iterdir())) if SESSIONS.exists() else 0,
+    })
+
+@APP.route("/", methods=["GET"])
+def root():
+    return jsonify({
+        "status": "ok",
+        "service": "software-factory-agent",
+        "model": CONFIG["model"],
+        "endpoints": ["/v1/chat/completions", "/v1/models", "/health"]
+    })
+
+@APP.route("/v1", methods=["GET"])
+def v1_root():
+    return root()
+
+@APP.route("/v1/models", methods=["GET"])
+def list_models():
+    return jsonify({
+        "object": "list",
+        "data": [{
+            "id": CONFIG["model"],
+            "object": "model",
+            "created": int(time.time()),
+            "owned_by": "local"
+        }]
+    })
+
+if __name__ == "__main__":
+    ledger("agent_start", model=CONFIG["model"])
+    log.info("agent listening on %s:%d", CONFIG["listen_host"], CONFIG["listen_port"])
+    APP.run(host=CONFIG["listen_host"], port=CONFIG["listen_port"])

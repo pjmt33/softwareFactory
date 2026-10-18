@@ -1,3 +1,10 @@
 .DS_Store
 *.swp
 docs/plans/**/tmp/
+agent/.venv/
+__pycache__/
+*.py[cod]
+agent/logs/
+agent/data/sessions/
+agent/data/ledger/
+agent/data/incidents/

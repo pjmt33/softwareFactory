@@ -72,6 +72,33 @@ The accepted slug format is a lowercase letter followed by up to 63 lowercase
 letters, digits, or hyphens. The initializer creates a new plan directory and
 status file; it does not overwrite an existing plan.
 
+## Local agent diagnostics
+
+The local bridge listens on `127.0.0.1:8082` by default. Before connecting a
+client, confirm the port is free and identify the process listening on it; do
+not stop processes by broad name matching.
+
+- Request arrival and HTTP errors: `agent/logs/agent.log`
+- Agent events such as `chat_request`, `tool_read`, and `turn_end`:
+  `agent/data/ledger/runs.jsonl`
+- Model messages and tool activity for a conversation:
+  `agent/data/sessions/<id>/messages.jsonl` and `tool_calls.jsonl`
+
+```sh
+grep 'POST /v1/chat/completions' agent/logs/agent.log
+grep -E 'chat_request|tool_read|turn_end' agent/data/ledger/runs.jsonl
+cat agent/data/sessions/SESSION_ID/messages.jsonl
+```
+
+Replace `SESSION_ID` with the directory name recorded in `runs.jsonl`.
+Send the full conversation history on each chat-completion request and reuse a
+stable `conversation_id` (or `X-Conversation-ID`) across turns. Client-supplied
+system/developer messages are ignored; the bridge prepends its own policy
+prompt. Planning artifacts are restricted to the active plan directory.
+Implementation writes and allowlisted test/inspection commands are unavailable
+until Gate 4 is approved in that plan's status file. The shell tool does not
+invoke a shell and rejects commands outside its allowlist.
+
 ## Repository boundaries
 
 - Keep this repository's skill, templates, scripts, and plan artifacts here.

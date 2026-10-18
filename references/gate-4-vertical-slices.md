@@ -1,7 +1,11 @@
 # Gate 4 — Vertical Slices (tracer bullets)
 
-First write the slice plan as `04-slices.md` — one line per slice, in build order —
-and run the approval protocol on it. Then build one slice at a time.
+Read the approved product, architecture, and program-design documents, plus the
+current status and relevant code. Before planning, ask focused questions about
+acceptance, test/run commands, dependencies, and slice boundaries in one
+message; wait for the user's answers and do not invent constraints. Then write
+the slice plan as `04-slices.md` — one line per slice, in build order — and run
+the approval protocol on it. Implement only after Gate 4 is approved.
 
 ## Slice rules
 - Slice 1 is the tracer bullet: a mocked/hardcoded endpoint and a stubbed UI

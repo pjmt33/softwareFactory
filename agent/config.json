@@ -1,0 +1,12 @@
+{
+  "model": "qwen2.5:latest",
+  "ollama_native_url": "http://localhost:11434/api/chat",
+  "ollama_openai_url": "http://localhost:11434/v1",
+  "listen_port": 8082,
+  "listen_host": "127.0.0.1",
+  "max_retries": 3,
+  "max_steps_per_turn": 25,
+  "trust_text_when_tools_present": false,
+  "context_window": 32768,
+  "log_level": "INFO"
+}

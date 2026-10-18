@@ -1,7 +1,11 @@
 # Gate 3 — Program Design (the step everyone skips)
 
-The decisions the agent would otherwise make silently mid-implementation.
-Save to `docs/plans/<slug>/03-program-design.md`.
+Read the approved product and architecture documents and inspect the relevant
+code. Identify decisions still needed about changed files, interfaces, call
+flows, tests, and the three least-confident decisions. Ask focused clarifying
+questions in one message and wait for the user's answers before drafting; do
+not repeat settled decisions or invent constraints. Save the approved draft to
+`docs/plans/<slug>/03-program-design.md`.
 
     # Program Design: <feature name>
 
