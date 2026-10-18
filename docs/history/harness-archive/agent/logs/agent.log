@@ -1,0 +1,334 @@
+2026-10-17 20:47:54,036 INFO agent listening on 127.0.0.1:8081
+2026-10-17 20:47:54,049 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 20:47:54,049 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 20:48:29,725 INFO 127.0.0.1 - - [17/Oct/2026 20:48:29] "GET /health HTTP/1.1" 200 -
+2026-10-17 20:50:13,317 INFO agent listening on 127.0.0.1:8081
+2026-10-17 20:50:13,324 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 20:50:13,324 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 20:52:27,499 INFO agent listening on 127.0.0.1:8081
+2026-10-17 20:52:27,507 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 20:52:27,507 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 20:56:50,639 INFO agent listening on 127.0.0.1:8081
+2026-10-17 20:56:50,646 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 20:56:50,646 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 20:57:23,402 INFO 127.0.0.1 - - [17/Oct/2026 20:57:23] "[33mGET /v1 HTTP/1.1[0m" 404 -
+2026-10-17 20:57:46,727 INFO 127.0.0.1 - - [17/Oct/2026 20:57:46] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 20:59:08,672 INFO agent listening on 127.0.0.1:8081
+2026-10-17 20:59:08,686 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 20:59:08,686 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 20:59:27,933 INFO agent listening on 127.0.0.1:8081
+2026-10-17 20:59:27,941 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 20:59:27,941 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 20:59:42,227 INFO 127.0.0.1 - - [17/Oct/2026 20:59:42] "GET /v1/models HTTP/1.1" 200 -
+2026-10-17 20:59:48,484 INFO 127.0.0.1 - - [17/Oct/2026 20:59:48] "GET /health HTTP/1.1" 200 -
+2026-10-17 21:00:02,339 INFO 127.0.0.1 - - [17/Oct/2026 21:00:02] "[33mGET /v1 HTTP/1.1[0m" 404 -
+2026-10-17 21:03:07,864 INFO agent listening on 127.0.0.1:8081
+2026-10-17 21:03:07,875 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 21:03:07,875 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 21:03:16,188 INFO 127.0.0.1 - - [17/Oct/2026 21:03:16] "GET / HTTP/1.1" 200 -
+2026-10-17 21:03:21,754 INFO 127.0.0.1 - - [17/Oct/2026 21:03:21] "GET /v1 HTTP/1.1" 200 -
+2026-10-17 21:03:32,214 INFO 127.0.0.1 - - [17/Oct/2026 21:03:32] "GET /v1 HTTP/1.1" 200 -
+2026-10-17 21:06:40,884 INFO agent listening on 127.0.0.1:8081
+2026-10-17 21:06:40,893 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 21:06:40,893 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 21:24:00,280 INFO agent listening on 127.0.0.1:8081
+2026-10-17 21:24:00,298 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 21:24:00,298 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 21:27:47,137 INFO 127.0.0.1 - - [17/Oct/2026 21:27:47] "GET /v1 HTTP/1.1" 200 -
+2026-10-17 21:30:19,465 INFO 127.0.0.1 - - [17/Oct/2026 21:30:19] "GET /v1 HTTP/1.1" 200 -
+2026-10-17 21:30:26,098 INFO 127.0.0.1 - - [17/Oct/2026 21:30:26] "GET /v1 HTTP/1.1" 200 -
+2026-10-17 21:32:02,247 WARNING model produced text with tools present; nudging
+2026-10-17 21:32:22,458 INFO 127.0.0.1 - - [17/Oct/2026 21:32:22] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 21:33:41,701 WARNING model produced text with tools present; nudging
+2026-10-17 21:34:02,452 INFO 127.0.0.1 - - [17/Oct/2026 21:34:02] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 21:37:28,862 WARNING model produced text with tools present; nudging
+2026-10-17 21:39:53,597 INFO agent listening on 127.0.0.1:8081
+2026-10-17 21:39:53,635 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 21:39:53,636 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 21:45:26,051 INFO agent listening on 127.0.0.1:8081
+2026-10-17 21:45:26,083 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8081
+2026-10-17 21:45:26,083 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 21:50:50,256 INFO 127.0.0.1 - - [17/Oct/2026 21:50:50] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 21:54:45,746 WARNING model produced text with tools present; nudging
+2026-10-17 21:55:38,794 INFO parsed 1 tool calls from text
+2026-10-17 21:55:38,821 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 260, in chat_completions
+    answer = run_loop(session, user_msg, CONFIG["max_steps_per_turn"])
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 217, in run_loop
+    tool_calls = [{"function": {"name": p.name, "arguments": p.arguments}} for p in parsed]
+                                                             ^^^^^^^^^^^
+AttributeError: 'ToolCall' object has no attribute 'arguments'
+2026-10-17 21:55:39,014 INFO 127.0.0.1 - - [17/Oct/2026 21:55:39] "[35m[1mPOST /v1/chat/completions HTTP/1.1[0m" 500 -
+2026-10-17 21:56:37,522 INFO 127.0.0.1 - - [17/Oct/2026 21:56:37] "GET /v1 HTTP/1.1" 200 -
+2026-10-17 21:56:47,611 INFO 127.0.0.1 - - [17/Oct/2026 21:56:47] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 21:58:14,119 INFO 127.0.0.1 - - [17/Oct/2026 21:58:14] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 22:02:49,174 WARNING model produced text with tools present; nudging
+2026-10-17 22:03:42,902 INFO 127.0.0.1 - - [17/Oct/2026 22:03:42] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 22:06:46,302 WARNING model produced text with tools present; nudging
+2026-10-17 22:07:39,541 INFO 127.0.0.1 - - [17/Oct/2026 22:07:39] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 23:35:49,155 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 402, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+RuntimeError: max steps
+2026-10-17 23:35:49,167 INFO parsed 1 tool calls from text
+2026-10-17 23:36:17,772 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 403, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+RuntimeError: max steps
+2026-10-17 23:36:17,781 INFO parsed 1 tool calls from text
+2026-10-17 23:36:44,356 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 403, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+RuntimeError: max steps
+2026-10-17 23:36:44,366 INFO parsed 1 tool calls from text
+2026-10-17 23:37:07,334 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 403, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+RuntimeError: max steps
+2026-10-17 23:37:07,340 INFO parsed 1 tool calls from text
+2026-10-17 23:38:42,344 INFO agent listening on 127.0.0.1:8082
+2026-10-17 23:38:42,361 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-17 23:38:42,361 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 23:38:48,967 INFO 127.0.0.1 - - [17/Oct/2026 23:38:48] "GET / HTTP/1.1" 200 -
+2026-10-17 23:38:48,990 INFO 127.0.0.1 - - [17/Oct/2026 23:38:48] "GET /v1/models HTTP/1.1" 200 -
+2026-10-17 23:38:57,479 INFO 127.0.0.1 - - [17/Oct/2026 23:38:57] "GET /health HTTP/1.1" 200 -
+2026-10-17 23:40:40,356 WARNING model produced text with tools present; nudging
+2026-10-17 23:40:53,021 INFO parsed 1 tool calls from text
+2026-10-17 23:40:53,066 INFO 127.0.0.1 - - [17/Oct/2026 23:40:53] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 23:41:50,450 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 417, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+RuntimeError: max steps
+2026-10-17 23:41:50,476 INFO parsed 1 tool calls from text
+2026-10-17 23:42:10,506 INFO agent listening on 127.0.0.1:8082
+2026-10-17 23:42:10,522 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-17 23:42:10,522 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 23:42:42,976 WARNING model produced text with tools present; nudging
+2026-10-17 23:42:53,437 WARNING model produced text with tools present; nudging
+2026-10-17 23:43:04,061 WARNING model produced text with tools present; nudging
+2026-10-17 23:43:14,435 WARNING model produced text with tools present; nudging
+2026-10-17 23:43:25,324 WARNING model produced text with tools present; nudging
+2026-10-17 23:43:36,064 WARNING model produced text with tools present; nudging
+2026-10-17 23:43:46,646 WARNING model produced text with tools present; nudging
+2026-10-17 23:43:57,822 WARNING model produced text with tools present; nudging
+2026-10-17 23:44:08,982 WARNING model produced text with tools present; nudging
+2026-10-17 23:44:19,752 WARNING model produced text with tools present; nudging
+2026-10-17 23:44:30,914 WARNING model produced text with tools present; nudging
+2026-10-17 23:44:41,757 WARNING model produced text with tools present; nudging
+2026-10-17 23:44:51,947 WARNING model produced text with tools present; nudging
+2026-10-17 23:45:01,289 WARNING model produced text with tools present; nudging
+2026-10-17 23:45:11,301 WARNING model produced text with tools present; nudging
+2026-10-17 23:45:36,044 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 425, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+RuntimeError: max steps
+2026-10-17 23:45:36,050 INFO parsed 1 tool calls from text
+2026-10-17 23:45:36,093 WARNING model produced text with tools present; nudging
+2026-10-17 23:45:36,094 WARNING model produced text with tools present; nudging
+2026-10-17 23:45:52,946 INFO agent listening on 127.0.0.1:8082
+2026-10-17 23:45:52,989 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-17 23:45:52,989 INFO [33mPress CTRL+C to quit[0m
+2026-10-17 23:46:27,462 WARNING model produced text with tools present; nudging
+2026-10-17 23:46:41,729 INFO parsed 1 tool calls from text
+2026-10-17 23:46:41,765 INFO 127.0.0.1 - - [17/Oct/2026 23:46:41] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-17 23:47:55,462 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 425, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.15/3.15.0/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+RuntimeError: max steps
+2026-10-17 23:47:55,469 INFO parsed 1 tool calls from text
+2026-10-17 23:47:55,487 WARNING model produced text with tools present; nudging
+2026-10-17 23:47:55,487 WARNING model produced text with tools present; nudging
+2026-10-18 06:38:14,069 INFO agent listening on 127.0.0.1:8082
+2026-10-18 06:38:14,120 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 06:38:14,120 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 06:39:41,319 INFO 127.0.0.1 - - [18/Oct/2026 06:39:41] "GET / HTTP/1.1" 200 -
+2026-10-18 06:39:41,568 INFO 127.0.0.1 - - [18/Oct/2026 06:39:41] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-10-18 06:40:32,011 INFO 127.0.0.1 - - [18/Oct/2026 06:40:32] "GET /health HTTP/1.1" 200 -
+2026-10-18 06:41:51,039 INFO 127.0.0.1 - - [18/Oct/2026 06:41:51] "GET /v1 HTTP/1.1" 200 -
+2026-10-18 06:41:51,151 INFO 127.0.0.1 - - [18/Oct/2026 06:41:51] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-10-18 06:42:06,695 INFO 127.0.0.1 - - [18/Oct/2026 06:42:06] "GET / HTTP/1.1" 200 -
+2026-10-18 07:33:09,157 INFO agent listening on 127.0.0.1:8082
+2026-10-18 07:33:09,202 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 07:33:09,203 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 07:33:11,688 INFO 127.0.0.1 - - [18/Oct/2026 07:33:11] "GET /health HTTP/1.1" 200 -
+2026-10-18 07:33:25,315 INFO 127.0.0.1 - - [18/Oct/2026 07:33:25] "GET /health HTTP/1.1" 200 -
+2026-10-18 07:33:42,097 INFO 127.0.0.1 - - [18/Oct/2026 07:33:42] "GET /health HTTP/1.1" 200 -
+2026-10-18 07:40:36,289 INFO agent listening on 127.0.0.1:8082
+2026-10-18 07:40:36,310 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 07:40:36,310 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 07:41:10,594 INFO 127.0.0.1 - - [18/Oct/2026 07:41:10] "GET /v1 HTTP/1.1" 200 -
+2026-10-18 07:41:16,213 INFO 127.0.0.1 - - [18/Oct/2026 07:41:16] "GET / HTTP/1.1" 200 -
+2026-10-18 07:44:53,188 WARNING model produced text with tools present; nudging
+2026-10-18 07:45:42,046 WARNING model produced text with tools present; nudging
+2026-10-18 07:46:11,705 INFO 127.0.0.1 - - [18/Oct/2026 07:46:11] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-18 07:46:33,724 INFO 127.0.0.1 - - [18/Oct/2026 07:46:33] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-18 07:47:28,669 WARNING model produced text with tools present; nudging
+2026-10-18 07:48:36,675 INFO 127.0.0.1 - - [18/Oct/2026 07:48:36] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-18 07:49:39,518 WARNING model produced text with tools present; nudging
+2026-10-18 07:50:19,213 INFO 127.0.0.1 - - [18/Oct/2026 07:50:19] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-18 09:20:26,994 INFO agent listening on 127.0.0.1:8082
+2026-10-18 09:20:27,026 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 09:20:27,026 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 09:20:44,349 INFO 127.0.0.1 - - [18/Oct/2026 09:20:44] "GET /health HTTP/1.1" 200 -
+2026-10-18 09:21:28,060 INFO 127.0.0.1 - - [18/Oct/2026 09:21:28] "GET /v1 HTTP/1.1" 200 -
+2026-10-18 09:23:41,682 INFO agent listening on 127.0.0.1:8082
+2026-10-18 09:23:41,726 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 09:23:41,726 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 09:23:53,991 INFO 127.0.0.1 - - [18/Oct/2026 09:23:53] "GET /v1 HTTP/1.1" 200 -
+2026-10-18 09:23:57,610 INFO 127.0.0.1 - - [18/Oct/2026 09:23:57] "GET / HTTP/1.1" 200 -
+2026-10-18 09:28:53,663 WARNING model produced text with tools present; nudging
+2026-10-18 09:29:59,675 WARNING model produced text with tools present; nudging
+2026-10-18 09:32:03,797 WARNING model produced text with tools present; nudging
+2026-10-18 09:32:03,857 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 425, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 362, in run_loop
+    raise RuntimeError(
+        f"model did not call a tool after {no_tool_call_retries} attempts"
+    )
+RuntimeError: model did not call a tool after 3 attempts
+2026-10-18 09:32:04,051 INFO 127.0.0.1 - - [18/Oct/2026 09:32:04] "[35m[1mPOST /v1/chat/completions HTTP/1.1[0m" 502 -
+2026-10-18 09:33:55,179 INFO agent listening on 127.0.0.1:8082
+2026-10-18 09:33:55,215 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 09:33:55,215 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 09:38:23,068 INFO agent listening on 127.0.0.1:8082
+2026-10-18 09:38:23,079 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 09:38:23,079 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 09:38:39,054 INFO 127.0.0.1 - - [18/Oct/2026 09:38:39] "GET /health HTTP/1.1" 200 -
+2026-10-18 09:42:01,528 WARNING model produced text with tools present; nudging
+2026-10-18 09:42:19,475 INFO 127.0.0.1 - - [18/Oct/2026 09:42:19] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-18 09:43:10,592 WARNING model produced text with tools present; nudging
+2026-10-18 09:43:50,920 WARNING model produced text with tools present; nudging
+2026-10-18 09:44:58,399 WARNING model produced text with tools present; nudging
+2026-10-18 09:44:58,533 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 425, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 362, in run_loop
+    raise RuntimeError(
+        f"model did not call a tool after {no_tool_call_retries} attempts"
+    )
+RuntimeError: model did not call a tool after 3 attempts
+2026-10-18 09:44:58,670 INFO 127.0.0.1 - - [18/Oct/2026 09:44:58] "[35m[1mPOST /v1/chat/completions HTTP/1.1[0m" 502 -
+2026-10-18 09:45:58,433 WARNING model produced text with tools present; nudging
+2026-10-18 09:46:58,483 WARNING model produced text with tools present; nudging
+2026-10-18 09:47:50,158 WARNING model produced text with tools present; nudging
+2026-10-18 09:47:50,259 ERROR loop failed
+Traceback (most recent call last):
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 425, in chat_completions
+    answer = run_loop(session, conversation, CONFIG["max_steps_per_turn"], explicit_approval)
+  File "/Volumes/dbdata/softwareFactory/agent/agent.py", line 362, in run_loop
+    raise RuntimeError(
+        f"model did not call a tool after {no_tool_call_retries} attempts"
+    )
+RuntimeError: model did not call a tool after 3 attempts
+2026-10-18 09:47:50,282 INFO 127.0.0.1 - - [18/Oct/2026 09:47:50] "[35m[1mPOST /v1/chat/completions HTTP/1.1[0m" 502 -
+2026-10-18 10:40:04,340 INFO agent listening on 127.0.0.1:8082
+2026-10-18 10:40:04,360 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 10:40:04,360 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 10:40:14,737 INFO 127.0.0.1 - - [18/Oct/2026 10:40:14] "GET /health HTTP/1.1" 200 -
+2026-10-18 10:40:14,806 INFO 127.0.0.1 - - [18/Oct/2026 10:40:14] "GET /v1/models HTTP/1.1" 200 -
+2026-10-18 10:43:58,947 INFO 127.0.0.1 - - [18/Oct/2026 10:43:58] "GET /v1 HTTP/1.1" 200 -
+2026-10-18 10:43:59,116 INFO 127.0.0.1 - - [18/Oct/2026 10:43:59] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-10-18 10:46:28,784 WARNING model produced text with tools present; nudging
+2026-10-18 10:47:12,692 INFO 127.0.0.1 - - [18/Oct/2026 10:47:12] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-18 10:49:54,503 WARNING model produced text with tools present; nudging
+2026-10-18 10:50:20,060 INFO 127.0.0.1 - - [18/Oct/2026 10:50:20] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-18 11:06:28,886 INFO agent listening on 127.0.0.1:8082
+2026-10-18 11:06:28,907 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8082
+2026-10-18 11:06:28,908 INFO [33mPress CTRL+C to quit[0m
+2026-10-18 11:07:49,304 INFO 127.0.0.1 - - [18/Oct/2026 11:07:49] "GET /v1 HTTP/1.1" 200 -
+2026-10-18 11:07:51,798 INFO 127.0.0.1 - - [18/Oct/2026 11:07:51] "GET /v1 HTTP/1.1" 200 -
+2026-10-18 11:07:56,670 INFO 127.0.0.1 - - [18/Oct/2026 11:07:56] "GET / HTTP/1.1" 200 -
+2026-10-18 11:07:56,780 INFO 127.0.0.1 - - [18/Oct/2026 11:07:56] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-10-18 11:08:49,284 INFO 127.0.0.1 - - [18/Oct/2026 11:08:49] "POST /v1/chat/completions HTTP/1.1" 200 -
+2026-10-18 11:10:44,919 WARNING model produced text with tools present; nudging
+2026-10-18 11:11:38,636 INFO 127.0.0.1 - - [18/Oct/2026 11:11:38] "POST /v1/chat/completions HTTP/1.1" 200 -

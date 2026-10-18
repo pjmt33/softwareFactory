@@ -1,0 +1,1 @@
+{"ts": "2026-10-18T03:42:26+00:00", "name": "read_file", "args": {"path": "agent/config.json"}, "result": "{\n  \"model\": \"qwen2.5:latest\",\n  \"ollama_native_url\": \"http://localhost:11434/api/chat\",\n  \"ollama_openai_url\": \"http://localhost:11434/v1\",\n  \"listen_port\": 8082,\n  \"listen_host\": \"127.0.0.1\",\n  \"max", "ok": true}

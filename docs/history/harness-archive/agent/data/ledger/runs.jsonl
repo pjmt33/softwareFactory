@@ -1,0 +1,102 @@
+{"ts": "2026-10-18T00:47:54+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T00:50:13+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T00:52:27+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T00:56:50+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T00:57:09+00:00", "event": "chat_request", "session": "20261018T005709Z-d732ac76", "tools_present": false}
+{"ts": "2026-10-18T00:57:46+00:00", "event": "turn_end", "steps": 1}
+{"ts": "2026-10-18T00:59:08+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T00:59:27+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T01:03:07+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T01:06:40+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T01:24:00+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T01:29:55+00:00", "event": "chat_request", "session": "20261018T012955Z-18e3d045", "tools_present": true}
+{"ts": "2026-10-18T01:30:53+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T01:32:22+00:00", "event": "turn_end", "steps": 3}
+{"ts": "2026-10-18T01:32:22+00:00", "event": "chat_request", "session": "20261018T013222Z-5e952b16", "tools_present": true}
+{"ts": "2026-10-18T01:32:35+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T01:34:02+00:00", "event": "turn_end", "steps": 3}
+{"ts": "2026-10-18T01:35:47+00:00", "event": "chat_request", "session": "20261018T013546Z-3f099d92", "tools_present": true}
+{"ts": "2026-10-18T01:39:53+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T01:43:19+00:00", "event": "chat_request", "session": "20261018T014319Z-79bb09f1", "tools_present": true}
+{"ts": "2026-10-18T01:45:26+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T01:46:45+00:00", "event": "chat_request", "session": "20261018T014645Z-f0b28ba4", "tools_present": true}
+{"ts": "2026-10-18T01:48:32+00:00", "event": "tool_read", "path": "MANUAL.md", "bytes": 3873}
+{"ts": "2026-10-18T01:48:32+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T01:50:50+00:00", "event": "turn_end", "steps": 2}
+{"ts": "2026-10-18T01:50:50+00:00", "event": "chat_request", "session": "20261018T015050Z-642c7a7b", "tools_present": true}
+{"ts": "2026-10-18T01:51:17+00:00", "event": "tool_read", "path": "MANUAL.md", "bytes": 3873}
+{"ts": "2026-10-18T01:51:17+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T01:53:30+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T01:55:07+00:00", "event": "chat_request", "session": "20261018T015507Z-e7e8c59e", "tools_present": true}
+{"ts": "2026-10-18T01:56:47+00:00", "event": "tool_read", "path": "MANUAL.md", "bytes": 3873}
+{"ts": "2026-10-18T01:56:47+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T01:56:47+00:00", "event": "turn_end", "steps": 1}
+{"ts": "2026-10-18T01:56:47+00:00", "event": "chat_request", "session": "20261018T015647Z-f378600b", "tools_present": true}
+{"ts": "2026-10-18T01:58:14+00:00", "event": "tool_read", "path": "MANUAL.md", "bytes": 3873}
+{"ts": "2026-10-18T01:58:14+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T01:58:14+00:00", "event": "turn_end", "steps": 1}
+{"ts": "2026-10-18T01:59:49+00:00", "event": "chat_request", "session": "20261018T015949Z-c1e116bc", "tools_present": true}
+{"ts": "2026-10-18T02:00:18+00:00", "event": "tool_read", "path": "MANUAL.md", "bytes": 3873}
+{"ts": "2026-10-18T02:00:18+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T02:03:42+00:00", "event": "turn_end", "steps": 3}
+{"ts": "2026-10-18T02:03:42+00:00", "event": "chat_request", "session": "20261018T020342Z-e9f3bb01", "tools_present": true}
+{"ts": "2026-10-18T02:04:07+00:00", "event": "tool_read", "path": "MANUAL.md", "bytes": 3873}
+{"ts": "2026-10-18T02:04:07+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T02:07:39+00:00", "event": "turn_end", "steps": 3}
+{"ts": "2026-10-18T03:38:42+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T03:39:12+00:00", "event": "chat_request", "session": "e2c92c3b0f79bcc22aecba4c530057156680a9e40929143452d892e7b0471bd9", "turns": 1, "tools_present": false}
+{"ts": "2026-10-18T03:40:23+00:00", "event": "tool_read", "path": "agent/config.json", "bytes": 335}
+{"ts": "2026-10-18T03:40:53+00:00", "event": "turn_end", "steps": 3}
+{"ts": "2026-10-18T03:42:10+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T03:42:17+00:00", "event": "chat_request", "session": "b683e847d7eda9a88013e8ccac5e31dd84edfe3921c1c45c880da8d531bb0e0f", "turns": 1, "client_tools_present": false, "gate4_approved": false}
+{"ts": "2026-10-18T03:42:26+00:00", "event": "tool_read", "path": "agent/config.json", "bytes": 335}
+{"ts": "2026-10-18T03:45:52+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T03:45:59+00:00", "event": "chat_request", "session": "86afb9d6eb49bc48960173c74635feae992a376be072c317a48b8ea9fd32fdc2", "turns": 1, "client_tools_present": false, "gate4_approved": false}
+{"ts": "2026-10-18T03:46:09+00:00", "event": "tool_read", "path": "agent/config.json", "bytes": 335}
+{"ts": "2026-10-18T03:46:41+00:00", "event": "turn_end", "steps": 3}
+{"ts": "2026-10-18T10:38:14+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T11:33:09+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T11:40:36+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T11:42:36+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T11:44:24+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T11:46:11+00:00", "event": "turn_end", "steps": 2}
+{"ts": "2026-10-18T11:46:11+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T11:46:33+00:00", "event": "turn_end", "steps": 2}
+{"ts": "2026-10-18T11:46:33+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T11:48:00+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T11:48:36+00:00", "event": "turn_end", "steps": 2}
+{"ts": "2026-10-18T11:50:19+00:00", "event": "turn_end", "steps": 3}
+{"ts": "2026-10-18T13:20:26+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T13:23:41+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T13:25:04+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T13:26:12+00:00", "event": "tool_read", "path": "MANUAL.md", "bytes": 5160}
+{"ts": "2026-10-18T13:27:34+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T13:32:03+00:00", "event": "turn_error", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "reason": "no_tool_call"}
+{"ts": "2026-10-18T13:33:55+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T13:38:23+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T13:40:23+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T13:42:19+00:00", "event": "turn_end", "steps": 2}
+{"ts": "2026-10-18T13:42:19+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T13:44:58+00:00", "event": "turn_error", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "reason": "no_tool_call"}
+{"ts": "2026-10-18T13:44:59+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T13:47:50+00:00", "event": "turn_error", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "reason": "no_tool_call"}
+{"ts": "2026-10-18T13:47:53+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T13:48:04+00:00", "event": "tool_read", "path": "MANUAL.md", "bytes": 5160}
+{"ts": "2026-10-18T13:49:44+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T13:51:03+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T14:40:04+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T14:42:47+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T14:43:49+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T14:47:12+00:00", "event": "turn_end", "steps": 4}
+{"ts": "2026-10-18T14:47:12+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T14:47:26+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T14:50:20+00:00", "event": "turn_end", "steps": 4}
+{"ts": "2026-10-18T15:05:00+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T15:06:02+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T15:06:28+00:00", "event": "agent_start", "model": "qwen2.5:latest"}
+{"ts": "2026-10-18T15:07:22+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T15:07:34+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T15:08:49+00:00", "event": "turn_end", "steps": 3}
+{"ts": "2026-10-18T15:08:49+00:00", "event": "chat_request", "session": "8ed2133565595efccb04f2ff048e1c4f089ac6e93f7648f31709fb2d2556edad", "turns": 1, "client_tools_present": true, "gate4_approved": false}
+{"ts": "2026-10-18T15:09:02+00:00", "event": "tool_read", "path": "references/gate-1-product.md", "bytes": 1450}
+{"ts": "2026-10-18T15:11:38+00:00", "event": "turn_end", "steps": 4}
