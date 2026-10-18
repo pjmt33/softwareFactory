@@ -5034,3 +5034,13 @@ ordered by sequence of work, not by clock time.
 - Skill: PASS
 - Agent: not running
 - Features: 2 pending (gate-preambles, _smoke-test)
+
+## Gate 1 completed — 2026-10-18T14:13Z
+
+- Feature: gate-preambles
+- Gate 1 (Product): APPROVED 2026-10-18
+- Commit: 8b5f3ca — feat(gate-preambles): complete Gate 1 — product doc with real answers
+- Product doc: docs/plans/gate-preambles/01-product.md
+- Findings: model asks the four verbatim questions via inline prompt (ollama run);
+  agent tool-calling against qwen2.5:latest remains unreliable through the harness;
+  manual pattern is the proven path.
