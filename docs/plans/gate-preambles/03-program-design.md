@@ -1,27 +1,21 @@
 # Program Design: gate-preambles
 
 ## Files
-- references/gate-2-architecture.md: Contains architectural decisions for all gates
-- references/gate-3-program-design.md: This document itself
-- references/gate-4-vertical-slices.md: Slice plan with build order
-- docs/plans/gate-preambles/01-product.md: Product requirements and success metrics
+references/gate-2-architecture.md (add ask-first preamble before types/signatures)
+references/gate-3-program-design.md (add preamble before template)
+references/gate-4-vertical-slices.md (add preamble before slice plan)
+docs/plans/gate-preambles/00-status.md (mark gates approved)
 
 ## Types & signatures
+none, this is documentation
 
 ## Call stack
+none, no code runs
 
 ## Test plan
-1. Verify all four files exist in the repo
-2. Confirm each file contains approved content from its respective gate
-3. Check that no fabricated file paths or signatures exist
+A human opens each of the three reference files and confirms the preamble appears before the template.
 
 ## Least confident decisions
-1. Decision: Documentation-only feature structure
-   Alternative: Code implementation
-   Switcher: Evidence of code generation needs
-2. Decision: Four-file dependency graph
-   Alternative: Centralized documentation
-   Switcher: Proof of distributed knowledge requirements
-3. Decision: Explicit numbered questions per gate
-   Alternative: Descriptive guidance only
-   Switcher: Data showing previous gate failures
+1. (a) Preamble in each reference vs shared preambles.md — switch if they drift apart
+2. (b) Prose preamble vs harness-enforced ask-first — switch if models keep skipping the questions
+3. (c) Manual status edits vs harness-written approval — switch if manual edits become error-prone
