@@ -1,6 +1,6 @@
 # Status: gate-preambles
 
-- Gate 1 — Product: pending | in progress | APPROVED <date>
+- Gate 1 — Product: APPROVED 2026-10-18
 - Gate 2 — Architecture: pending | in progress | APPROVED <date>
 - Gate 3 — Program Design: pending | in progress | APPROVED <date>
 - Gate 4 — Slice plan: pending | in progress | APPROVED <date>
