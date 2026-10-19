@@ -133,6 +133,13 @@ def run(gate_ref, status, task):
                     + "\n".join(f"{i}. {q}" for i, q in enumerate(qs, 1))})
                 no_tools = True
                 continue
+            if content and not asked and not asked_gate_questions(content, qs) and rejected_writes >= 2:
+                messages.append({"role": "assistant", "content": content})
+                messages.append({"role": "user", "content":
+                    "Your questions were not the gate's questions. Output these verbatim, numbered, and do not call any tool:\n"
+                    + "\n".join(f"{i}. {q}" for i, q in enumerate(qs, 1))})
+                no_tools = True
+                continue
             if asked_gate_questions(content, qs):
                 asked = True
                 no_tools = False
