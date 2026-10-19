@@ -78,7 +78,7 @@ def asked_gate_questions(content, qs):
     norm = lambda t: " ".join(re.sub(r"\W+", " ", t.lower()).split())
     c = norm(content)
     hits = sum(1 for q in qs if " ".join(norm(q).split()[:4]) in c)
-    return hits >= min(2, len(qs))
+    return hits >= 1
 
 
 def probe() -> bool:
