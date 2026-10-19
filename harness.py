@@ -40,8 +40,24 @@ def wf(path, content):
     f.write_text(content, encoding="utf-8")
     return f"Wrote {len(content)} bytes to {path}"
 
+def gate_questions(ref_text):
+    """Extract numbered questions ending in ? from the gate reference."""
+    return re.findall(r"^\s*\d+\.\s+(.+\?)\s*$", ref_text, re.M)
+
+
+def asked_gate_questions(content, qs):
+    """True if at least 2 of the gate's questions appear in the model output."""
+    if not qs:
+        return False
+    norm = lambda t: " ".join(re.sub(r"\W+", " ", t.lower()).split())
+    c = norm(content)
+    hits = sum(1 for q in qs if " ".join(norm(q).split()[:4]) in c)
+    return hits >= min(2, len(qs))
+
+
 def run(gate_ref, status, task):
     slug = Path(status).parent.name
+    qs = gate_questions(rf(gate_ref))
     messages = [{"role": "user", "content":
         f"You are executing a gate.\n\nGATE REFERENCE:\n{rf(gate_ref).replace('<slug>', slug)}\n\n"
         f"STATUS:\n{rf(status).replace('<slug>', slug)}\n\nTASK:\n{task}\n\n"
@@ -63,17 +79,14 @@ def run(gate_ref, status, task):
                     "You output the unfilled template. Do not output the template. "
                     "Ask the four clarifying questions first, then write the doc with real content."})
                 continue
-            if any(w in content.lower() for w in ["approved", "protocol complete", "completes the gate"]):
+            if any(w in content.lower() for w in ["gate is approved", "gate approved", "protocol complete", "completes the gate", "gate complete"]):
                 messages.append({"role": "assistant", "content": content})
                 messages.append({"role": "user", "content":
                     "You cannot approve the gate; approval is human. Ask the clarifying questions now."})
                 continue
-            gate_markers = ("which existing", "what new", "do these signatures",
-                "are there types", "what are the three", "is this the right slice",
-                "should slice 1", "any slices missing", "acceptance criteria",
-                "test commands", "which files", "third-party services")
-            if any(m in content.lower() for m in gate_markers):
+            if asked_gate_questions(content, qs):
                 asked = True
+                no_tools = False
                 print(f"\n[model asks]\n{content}\n", file=sys.stderr)
                 try:
                     ans = get_answer("Your answer (blank to accept final output): ").strip()
