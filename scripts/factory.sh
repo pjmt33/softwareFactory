@@ -55,7 +55,30 @@ audit() {
   hdr "git"
   [ -d .git ] && git status --short --branch || { yellow "  not a git repo"; fail=1; }
   echo
-  [ "$fail" -eq 0 ] && green "AUDIT: OK" || red "AUDIT: issues above"
+  [ "$fail" -eq 0 ] && green "# Slice completion check
+slice_fail=0
+while IFS= read -r status_file; do
+  slug=$(dirname "$status_file")
+  while IFS= read -r line; do
+    desc=$(echo "$line" | sed 's/^[[:space:]]*- \[x\] Slice [0-9]* — //')
+    keyword=$(echo "$desc" | grep -oE '[A-Za-z_][A-Za-z0-9_-]{3,}' | grep -viE '^(slice|README|MANUAL|Gate|factory|audit|passes|cleanup|section|workflow|harness)$' | head -1)
+    if [ -z "$keyword" ]; then
+      echo "  AUDIT: FAIL — slice has no verifiable keyword: $line"
+      slice_fail=1
+      continue
+    fi
+    if ! grep -rqi "$keyword" "$slug" --include="*.md" 2>/dev/null; then
+      echo "  AUDIT: FAIL — slice checked but artifact not found: $line keyword=$keyword"
+      slice_fail=1
+    fi
+  done < <(grep -E '^[[:space:]]*- \[x\] Slice' "$status_file" 2>/dev/null)
+done < <(find docs/plans -name "00-status.md")
+if [ "$slice_fail" -ne 0 ]; then
+  echo "AUDIT: FAIL"
+  exit 1
+fi
+
+AUDIT: OK" || red "AUDIT: issues above"
   return "$fail"
 }
 
