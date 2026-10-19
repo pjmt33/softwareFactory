@@ -34,3 +34,28 @@ Run `harness.py ... --answer-file answers.txt` to read gate answers from a file 
 # softwareFactory
 # softwareFactory
 # softwareFactory
+
+## Running a gate
+
+The harness executes one gate at a time. It reads the gate reference, asks the
+gate's questions, and writes the artifact to `docs/plans/<slug>/`.
+
+    python3 harness.py references/gate-2-architecture.md docs/plans/<slug>/00-status.md "Gate 2 is pending. The slug is <slug>."
+
+To read gate answers from a file instead of typing:
+
+    python3 harness.py references/gate-2-architecture.md docs/plans/<slug>/00-status.md "..." --answer-file answers.txt
+
+The harness sandboxes reads to `references/` and `docs/plans/`, and writes to
+`docs/plans/` only. It will not overwrite an approved gate's artifact. A startup
+probe confirms the model can return structured tool calls before the gate runs.
+
+## The four gates
+
+1. Product — `docs/plans/<slug>/01-product.md`
+2. Architecture — `docs/plans/<slug>/02-architecture.md`
+3. Program Design — `docs/plans/<slug>/03-program-design.md`
+4. Slice plan — `docs/plans/<slug>/04-slices.md`
+
+Approval is manual: review the artifact, then edit the gate's line in
+`docs/plans/<slug>/00-status.md` to `APPROVED <date>`.
