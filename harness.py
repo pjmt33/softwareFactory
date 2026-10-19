@@ -147,7 +147,7 @@ def run(gate_ref, status, task):
                     continue
             return content
         messages.append(msg)
-        if len(read_cache) >= 2 and not asked and turn >= 2:
+        if len(read_cache) >= 2 and not asked and turn >= 2 and not no_tools:
             messages.append({"role": "user", "content":
                 "You have read the gate reference and the product doc. STOP. "
                 "Output the four Gate 2 questions as plain text now. Do not call any tool."})
@@ -160,6 +160,8 @@ def run(gate_ref, status, task):
             call_counts[key] = call_counts.get(key, 0) + 1
             if call_counts[key] >= 2 and name == "read_file":
                 result = f"Already read {args.get('path','')}. Do not re-read. Ask your clarifying questions now."
+                if call_counts[key] >= 3:
+                    no_tools = True
             elif name == "write_file" and not asked:
                 rejected_writes += 1
                 result = "REJECTED: ask clarifying questions before writing. Ask them now."
