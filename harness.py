@@ -50,6 +50,22 @@ def wf(path, content):
     f.write_text(content, encoding="utf-8")
     return f"Wrote {len(content)} bytes to {path}"
 
+def prior_artifacts(status_path, gate_ref):
+    """Return prior approved artifacts for gates before the current one."""
+    m = re.search(r"gate-(\d)", gate_ref)
+    n = int(m.group(1)) if m else 1
+    d = (R / status_path).resolve().parent
+    out = []
+    for f in sorted(d.glob("0[1-9]-*.md")):
+        try:
+            gn = int(f.name[1])
+        except ValueError:
+            continue
+        if gn < n:
+            out.append(f"=== {f.name} ===\n{f.read_text(encoding='utf-8')}")
+    return "\n\n".join(out)
+
+
 def gate_questions(ref_text):
     """Extract numbered questions ending in ? from the gate reference."""
     return re.findall(r"^\s*\d+\.\s+(.+\?)\s*$", ref_text, re.M)
@@ -80,9 +96,12 @@ def probe() -> bool:
 def run(gate_ref, status, task):
     slug = Path(status).parent.name
     qs = gate_questions(rf(gate_ref))
+    priors = prior_artifacts(status, gate_ref)
     messages = [{"role": "user", "content":
         f"You are executing a gate.\n\nGATE REFERENCE:\n{rf(gate_ref).replace('<slug>', slug)}\n\n"
-        f"STATUS:\n{rf(status).replace('<slug>', slug)}\n\nTASK:\n{task}\n\n"
+        f"STATUS:\n{rf(status).replace('<slug>', slug)}\n\n"
+        + (f"APPROVED PRIOR GATES (do not contradict these):\n{priors}\n\n" if priors else "")
+        + f"TASK:\n{task}\n\n"
         "Tools: read_file, write_file. RULE: ask your clarifying questions BEFORE calling write_file. "
         "Do not re-read a file you already read. If you call write_file before asking, it will be rejected."}]
     read_cache, call_counts = set(), {}
