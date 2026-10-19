@@ -2,7 +2,7 @@
 
 - Gate 1 — Product: APPROVED 2026-10-18
 - Gate 2 — Architecture: APPROVED 2026-10-18
-- Gate 3 — Program Design: APPROVED 2026-10-18
+- Gate 3 — Program Design: APPROVED 2026-10-19 (re-approved after harness scope change; see docs/adr/0001)
 - Gate 4 — Slice plan: APPROVED 2026-10-18
 
 ## Slices
