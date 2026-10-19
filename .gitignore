@@ -13,3 +13,13 @@ agent/agent.py.bak.*
 
 agent/agent.py.bak.*
 .aider*
+# Unanchored: match at any depth (the old patterns were root-anchored)
+**/agent/logs/
+**/agent/data/sessions/
+**/agent/data/ledger/
+**/agent/data/incidents/
+**/harness-archive/agent/data/
+# Runtime and credential artifacts
+answers.txt
+/tmp/answers.txt
+*.session.jsonl
