@@ -125,6 +125,13 @@ def run(gate_ref, status, task):
                 messages.append({"role": "user", "content":
                     "You cannot approve the gate; approval is human. Ask the clarifying questions now."})
                 continue
+            if not content and not asked:
+                messages.append({"role": "assistant", "content": content})
+                messages.append({"role": "user", "content":
+                    "Your response was empty. Ask the gate's questions now, verbatim, and do not call any tool:\n"
+                    + "\n".join(f"{i}. {q}" for i, q in enumerate(qs, 1))})
+                no_tools = True
+                continue
             if asked_gate_questions(content, qs):
                 asked = True
                 no_tools = False
