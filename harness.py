@@ -111,6 +111,9 @@ def run(gate_ref, status, task):
             elif name == "write_file":
                 p = args.get("path", "").replace("<slug>", slug)
                 result = wf(p, args.get("content", ""))
+                print(f"[tool] {name} -> {str(result)[:80]}...", file=sys.stderr)
+                messages.append({"role": "tool", "tool_name": name, "content": result})
+                return f"Wrote {p}. Gate artifact complete."
             else:
                 result = f"Unknown tool: {name}"
             print(f"[tool] {name} -> {str(result)[:80]}...", file=sys.stderr)
