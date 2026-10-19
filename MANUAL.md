@@ -116,11 +116,14 @@ manual is an operator overview; if it conflicts with those workflow
 instructions, follow the skill and gate references and update the manual.
 
 
-## Execution (Intel Mac, CPU-only)
+## Execution (thin harness, qwen3:8b)
 
-Use Aider in `ask` mode for gate discussions. It will not edit files until you switch to `code` mode.
+Run the harness with the gate reference, the feature's status file, and the task:
 
-- Model: `qwen2.5-coder:3b` (7B+ is too slow on CPU)
-- Gate 1–3 discussion: `aider --model ollama_chat/qwen2.5-coder:3b --chat-mode ask`
-- Gate 4 slice execution: `aider --model ollama_chat/qwen2.5-coder:3b --chat-mode code`
-- Do NOT use Poseidon (retired) or the archived Flask agent.
+    python3 harness.py references/gate-2-architecture.md docs/plans/<slug>/00-status.md "Gate 2 is pending. The slug is <slug>. Ask the gate's questions before writing."
+
+To read answers from a file instead of typing:
+
+    python3 harness.py references/gate-2-architecture.md docs/plans/<slug>/00-status.md "..." --answer-file answers.txt
+
+Approval is manual: edit docs/plans/<slug>/00-status.md after reviewing the artifact.
