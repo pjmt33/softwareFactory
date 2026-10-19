@@ -31,11 +31,21 @@ def call(messages, tools=None):
     return json.loads(urllib.request.urlopen(req).read())
 
 def rf(path):
-    f = R / path
+    f = (R / path).resolve()
+    allowed = [(R / "references").resolve(), (R / "docs" / "plans").resolve()]
+    if not any(a in f.parents or f == a for a in allowed):
+        return f"REJECTED: reads limited to references/ and docs/plans/. Got {path}"
     return f.read_text(encoding="utf-8") if f.exists() else f"Error: file not found: {path}"
 
 def wf(path, content):
-    f = R / path
+    f = (R / path).resolve()
+    plans = (R / "docs" / "plans").resolve()
+    if plans not in f.parents:
+        return f"REJECTED: writes limited to docs/plans/. Got {path}"
+    if f.exists():
+        status = (f.parent / "00-status.md")
+        if status.exists() and "APPROVED" in status.read_text(encoding="utf-8"):
+            return f"REJECTED: {path} belongs to an approved gate; will not overwrite."
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(content, encoding="utf-8")
     return f"Wrote {len(content)} bytes to {path}"
@@ -53,6 +63,18 @@ def asked_gate_questions(content, qs):
     c = norm(content)
     hits = sum(1 for q in qs if " ".join(norm(q).split()[:4]) in c)
     return hits >= min(2, len(qs))
+
+
+def probe() -> bool:
+    """Send a minimal ping tool; return True only if structured tool_calls come back."""
+    t = [{"type": "function", "function": {"name": "ping", "description": "Call this tool",
+          "parameters": {"type": "object", "properties": {"x": {"type": "string"}}, "required": ["x"]}}}]
+    try:
+        m = call([{"role": "user", "content": "Call the ping tool with x=hi."}], tools=t).get("message", {})
+        return any(tc.get("function", {}).get("name") == "ping" for tc in (m.get("tool_calls") or []))
+    except Exception as e:
+        print(f"Probe error: {e}", file=sys.stderr)
+        return False
 
 
 def run(gate_ref, status, task):
@@ -141,4 +163,8 @@ if __name__ == "__main__":
         del args[idx:idx + 2]
     if len(args) < 3:
         print("Usage: harness.py <gate_ref> <status> <task> [--answer-file <path>]"); sys.exit(1)
+    if not probe():
+        print("ABORT: tool-call probe failed. Model did not return structured tool_calls.", file=sys.stderr)
+        print("Check Ollama version and /api/chat tool rendering (see ollama/ollama#19040).", file=sys.stderr)
+        sys.exit(2)
     print("\n=== FINAL OUTPUT ===\n" + run(args[0], args[1], args[2]))
