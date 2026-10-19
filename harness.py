@@ -166,6 +166,10 @@ def run(gate_ref, status, task):
                     no_tools = True
             elif name == "read_file":
                 p = args.get("path", "").replace("<slug>", slug)
+                if "/" not in p:
+                    candidate = Path(status).parent / p
+                    if candidate.exists():
+                        p = str(candidate)
                 result = rf(p)
                 read_cache.add(p)
             elif name == "write_file":
