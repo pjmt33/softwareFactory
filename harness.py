@@ -69,7 +69,11 @@ def run(gate_ref, status, task):
                 messages.append({"role": "user", "content":
                     "You cannot approve the gate; approval is human. Ask the clarifying questions now."})
                 continue
-            if "?" in content or "please answer" in content.lower():
+            gate_markers = ("which existing", "what new", "do these signatures",
+                "are there types", "what are the three", "is this the right slice",
+                "should slice 1", "any slices missing", "acceptance criteria",
+                "test commands", "which files", "third-party services")
+            if any(m in content.lower() for m in gate_markers):
                 asked = True
                 print(f"\n[model asks]\n{content}\n", file=sys.stderr)
                 try:
