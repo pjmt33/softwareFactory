@@ -52,7 +52,6 @@ def run(gate_ref, status, task):
     for turn in range(20):
         print(f"\n--- Turn {turn+1} ---", file=sys.stderr)
         msg = call(messages, tools=[] if no_tools else TOOLS).get("message", {})
-        no_tools = False
         if msg.get("thinking"):
             print(f"[thinking] {msg['thinking'][:160]}...", file=sys.stderr)
         tcs = msg.get("tool_calls") or []
