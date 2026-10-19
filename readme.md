@@ -31,3 +31,4 @@ and one test, it does not enter the workflow.
     scripts/factory.sh init-feature <slug>
     scripts/factory.sh resume         # what a fresh session should read first
 Run `harness.py ... --answer-file answers.txt` to read gate answers from a file instead of typing them.
+# softwareFactory
