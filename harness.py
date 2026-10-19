@@ -105,8 +105,20 @@ def run(gate_ref, status, task):
         "Prior gate artifacts are already included above; do not read them again. "
         "Tools: read_file, write_file. RULE: ask your clarifying questions BEFORE calling write_file. "
         "Do not re-read a file you already read. If you call write_file before asking, it will be rejected."}]
+    # Ask the gate's questions directly; the model does not ask them.
+    qs_text = "\n".join(f"{i}. {q}" for i, q in enumerate(qs, 1))
+    print(f"\n=== Gate questions ({gate_ref}) ===\n{qs_text}\n", file=sys.stderr)
+    try:
+        direct = get_answer("Your answer to all gate questions (one line, or blank to let the model ask): ").strip()
+    except EOFError:
+        direct = ""
+    if direct:
+        messages.append({"role": "assistant", "content": qs_text})
+        messages.append({"role": "user", "content": direct})
+        asked, no_tools = True, False
     read_cache, call_counts = set(), {}
-    asked, rejected_writes, no_tools = False, 0, False
+    asked = asked if 'asked' in dir() else False
+    rejected_writes = 0
     for turn in range(20):
         print(f"\n--- Turn {turn+1} ---", file=sys.stderr)
         msg = call(messages, tools=[] if no_tools else TOOLS).get("message", {})
