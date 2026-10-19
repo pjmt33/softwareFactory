@@ -173,7 +173,8 @@ def run(gate_ref, status, task):
                 result = wf(p, args.get("content", ""))
                 print(f"[tool] {name} -> {str(result)[:80]}...", file=sys.stderr)
                 messages.append({"role": "tool", "tool_name": name, "content": result})
-                return f"Wrote {p}. Gate artifact complete."
+                if not result.startswith("REJECTED"):
+                    return f"Wrote {p}. Gate artifact complete."
             else:
                 result = f"Unknown tool: {name}"
             print(f"[tool] {name} -> {str(result)[:80]}...", file=sys.stderr)
