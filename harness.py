@@ -102,6 +102,7 @@ def run(gate_ref, status, task):
         f"STATUS:\n{rf(status).replace('<slug>', slug)}\n\n"
         + (f"APPROVED PRIOR GATES (do not contradict these):\n{priors}\n\n" if priors else "")
         + f"TASK:\n{task}\n\n"
+        "Prior gate artifacts are already included above; do not read them again. "
         "Tools: read_file, write_file. RULE: ask your clarifying questions BEFORE calling write_file. "
         "Do not re-read a file you already read. If you call write_file before asking, it will be rejected."}]
     read_cache, call_counts = set(), {}
