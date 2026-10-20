@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export -n SHELLOPTS
 # scripts/factory.sh — local-only, read-only except for init-feature
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -56,6 +57,7 @@ audit() {
   [ -d .git ] && git status --short --branch || { yellow "  not a git repo"; fail=1; }
   echo
   [ "$fail" -eq 0 ] && green "# Slice completion check
+set +u
 slice_fail=0
 while IFS= read -r status_file; do
   slug=$(dirname "$status_file")
@@ -73,6 +75,7 @@ while IFS= read -r status_file; do
     fi
   done < <(grep -E '^[[:space:]]*- \[x\] Slice' "$status_file" 2>/dev/null)
 done < <(find docs/plans -name "00-status.md")
+set -u
 if [ "$slice_fail" -ne 0 ]; then
   echo "AUDIT: FAIL"
   exit 1
