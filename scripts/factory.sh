@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-export -n SHELLOPTS
 # scripts/factory.sh — local-only, read-only except for init-feature
-set -uo pipefail
+set -o pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT" || exit 1
 
@@ -57,13 +56,12 @@ audit() {
   [ -d .git ] && git status --short --branch || { yellow "  not a git repo"; fail=1; }
   echo
   [ "$fail" -eq 0 ] && green "# Slice completion check
-set +u
 slice_fail=0
 while IFS= read -r status_file; do
   slug=$(dirname "$status_file")
   while IFS= read -r line; do
-    desc=$(echo "$line" | sed 's/^[[:space:]]*- \[x\] Slice [0-9]* — //')
-    keyword=$(echo "$desc" | grep -oE '[A-Za-z_][A-Za-z0-9_-]{3,}' | grep -viE '^(slice|README|MANUAL|Gate|factory|audit|passes|cleanup|section|workflow|harness)$' | head -1)
+    desc=$(printf '%s\n' "$line" | sed 's/^[[:space:]]*- \[x\] Slice [0-9]* — //')
+    keyword=$(printf '%s\n' "$desc" | grep -oE '[A-Za-z_][A-Za-z0-9_-]{3,}' | grep -viE '^(slice|README|MANUAL|Gate|factory|audit|passes|cleanup|section|workflow|harness)$' | head -1)
     if [ -z "$keyword" ]; then
       echo "  AUDIT: FAIL — slice has no verifiable keyword: $line"
       slice_fail=1
@@ -75,7 +73,6 @@ while IFS= read -r status_file; do
     fi
   done < <(grep -E '^[[:space:]]*- \[x\] Slice' "$status_file" 2>/dev/null)
 done < <(find docs/plans -name "00-status.md")
-set -u
 if [ "$slice_fail" -ne 0 ]; then
   echo "AUDIT: FAIL"
   exit 1
