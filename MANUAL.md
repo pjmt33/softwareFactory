@@ -72,6 +72,26 @@ The accepted slug format is a lowercase letter followed by up to 63 lowercase
 letters, digits, or hyphens. The initializer creates a new plan directory and
 status file; it does not overwrite an existing plan.
 
+### Sync
+
+Before pushing, run the two checks and only push on green:
+
+```sh
+scripts/factory.sh audit && scripts/factory.sh check-skill && git push origin HEAD
+```
+
+Pull with rebase to keep the commit history reviewable:
+
+```sh
+git pull --rebase origin HEAD
+```
+
+Pull between gates, not during one — a mid-gate rebase can conflict on
+`docs/plans/<slug>/00-status.md` if the remote changed it.
+
+Answer files are single-use. Optionally start the file with a `# gate-N`
+header; the harness aborts if the header does not match the gate reference.
+
 ## Local agent diagnostics
 
 The local bridge listens on `127.0.0.1:8082` by default. Before connecting a
