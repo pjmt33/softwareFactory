@@ -23,3 +23,6 @@ agent/agent.py.bak.*
 answers.txt
 /tmp/answers.txt
 *.session.jsonl
+
+# one-shot migration artifacts
+.patch/
