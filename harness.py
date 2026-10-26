@@ -54,11 +54,10 @@ def wf(path, content):
     plans = (R / "docs" / "plans").resolve()
     if plans not in f.parents:
         return f"REJECTED: writes limited to docs/plans/. Got {path}"
-    if f.exists():
-        status = f.parent / "00-status.md"
-        g = gate_of(f)
-        if g and status.exists() and gate_approved(status.read_text(encoding="utf-8"), g):
-            return f"REJECTED: {path} belongs to approved Gate {g}; will not overwrite."
+    status = f.parent / "00-status.md"
+    g = gate_of(f)
+    if g and status.exists() and gate_approved(status.read_text(encoding="utf-8"), g):
+        return f"REJECTED: {path} belongs to approved Gate {g}; will not write."
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(content, encoding="utf-8")
     return f"Wrote {len(content)} bytes to {path}"
