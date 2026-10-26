@@ -55,7 +55,12 @@ the current gate or describe what Gate N+1 will do.
   boundaries.
 - **Real tests only.** Before writing a test, run it against the pre-change code.
   If it passes, the test is wrong — rewrite until it fails, then implement.
-  Never comment out, skip, or weaken a test to get to green.
+  Never comment out, skip, or weaken a test to get to green. If you cannot
+  produce a genuine pre-change failure, stop and say why — do not proceed on a
+  test you cannot fail.
+- **Slice done.** A slice is done when it has: one commit, one test that failed
+  before the change and passes after, and its checkbox ticked in `04-slices.md`.
+  Do not start the next slice until the current one meets all three.
 - **ADR permission.** If a task conflicts with an accepted ADR, stop and propose
   whether the task or the ADR should change. Do not silently work around it.
 - **Artifacts.** Runnable code → `scripts/`; gate templates and knowledge →
