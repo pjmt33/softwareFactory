@@ -24,19 +24,28 @@ Mark gates APPROVED and check slices off as you go. That file is the resume anch
 
 ## Approval protocol (run at every gate)
 
-Do not narrate what you are about to do. Do the work in the response: ask the
-questions, draft the doc, present the summary. A numbered plan of what you will
-do is a failure.
+**Before you begin:** Do not narrate what you are about to do. Do the work in
+the response: ask the questions, draft the doc, present the summary. A numbered
+plan of what you will do is a failure. **Stop after the ask** — do not plan past
+the current gate or describe what Gate N+1 will do.
 
 1. Write the gate doc to disk.
 2. Present at most 5-10 bullet decisions plus the doc path. Do not paste the whole doc.
 3. Ask exactly: "Approve Gate N, or what should change?"
 4. Approval = the user clearly says yes / approve / continue. Anything else:
    revise the doc, re-ask.
-5. On approval: mark the gate APPROVED in `00-status.md`, move on.
-6. **Stop after the ask.** Do not plan past the current gate. Do not describe what Gate N+1 will do.
-7. **Backtracking:** if a later gate reveals an earlier decision is wrong, stop,
-   update the earlier doc, set that gate back to "in progress", re-approval before continuing.
+5. On approval: edit the gate's line in `00-status.md` to
+   `APPROVED <YYYY-MM-DD>`, move on.
+
+### Backtracking (only when a later gate invalidates an earlier one)
+
+1. Stop. Do not continue the later gate.
+2. In `00-status.md`, change the earlier gate's line to
+   `INVALIDATED <YYYY-MM-DD> by gate-N`. Do not delete the old approval.
+3. Update the earlier doc; set that gate's line to `in progress`.
+4. Ask the user to re-approve the earlier gate (same protocol above).
+5. The later gate's draft is frozen, not carried forward: resume it only after
+   the earlier gate is re-approved.
 
 ## Standing rules (always on)
 - **Compact at every boundary.** End of every gate and every slice: make sure the

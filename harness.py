@@ -37,15 +37,28 @@ def rf(path):
         return f"REJECTED: reads limited to references/ and docs/plans/. Got {path}"
     return f.read_text(encoding="utf-8") if f.exists() else f"Error: file not found: {path}"
 
+GATE_BY_PREFIX = {"01": 1, "02": 2, "03": 3, "04": 4}
+
+def gate_of(path):
+    """Gate number for an artifact path, or None if not a gated artifact."""
+    name = Path(path).name
+    return GATE_BY_PREFIX.get(name[:2]) if name[:2] in GATE_BY_PREFIX else None
+
+def gate_approved(status_text, gate_num):
+    """True iff the specific gate line is APPROVED."""
+    pat = re.compile(r"^- Gate\s+%d\b[^\n]*:\s*APPROVED(\s|$)" % gate_num, re.M)
+    return bool(pat.search(status_text))
+
 def wf(path, content):
     f = (R / path).resolve()
     plans = (R / "docs" / "plans").resolve()
     if plans not in f.parents:
         return f"REJECTED: writes limited to docs/plans/. Got {path}"
     if f.exists():
-        status = (f.parent / "00-status.md")
-        if status.exists() and "APPROVED" in status.read_text(encoding="utf-8"):
-            return f"REJECTED: {path} belongs to an approved gate; will not overwrite."
+        status = f.parent / "00-status.md"
+        g = gate_of(f)
+        if g and status.exists() and gate_approved(status.read_text(encoding="utf-8"), g):
+            return f"REJECTED: {path} belongs to approved Gate {g}; will not overwrite."
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(content, encoding="utf-8")
     return f"Wrote {len(content)} bytes to {path}"
@@ -212,7 +225,24 @@ if __name__ == "__main__":
     if "--answer-file" in args:
         idx = args.index("--answer-file")
         path = args[idx + 1]
-        ANSWER_LINES.extend(Path(path).read_text(encoding="utf-8").splitlines())
+        lines = Path(path).read_text(encoding="utf-8").splitlines()
+        expected = None
+        if lines and lines[0].startswith("#"):
+            m = re.match(r"#\s*gate-(\d)\b", lines[0].strip())
+            if not m:
+                print(f"ABORT: {path} header must be '# gate-N'. Got: {lines[0]!r}",
+                      file=sys.stderr)
+                sys.exit(2)
+            expected = int(m.group(1))
+            lines = lines[1:]
+        gate_arg = next((a for a in args if "gate-" in a), "")
+        gm = re.search(r"gate-(\d)", gate_arg)
+        actual = int(gm.group(1)) if gm else None
+        if expected is not None and actual is not None and expected != actual:
+            print(f"ABORT: answer file is for gate {expected}, "
+                  f"but gate ref is gate {actual}.", file=sys.stderr)
+            sys.exit(2)
+        ANSWER_LINES.extend(lines)
         del args[idx:idx + 2]
     if len(args) < 3:
         print("Usage: harness.py <gate_ref> <status> <task> [--answer-file <path>]"); sys.exit(1)
