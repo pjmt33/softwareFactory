@@ -104,6 +104,25 @@ def probe() -> bool:
         print(f"Probe error: {e}", file=sys.stderr)
         return False
 
+MIN_BYTES = {1: 200, 2: 300, 3: 400, 4: 200}
+PLACEHOLDER_RE = re.compile(r"\[[A-Za-z][^\]]{4,}\]")
+
+def artifact_suspect(path, gate_num):
+    """Return a warning string if the artifact looks truncated or unfilled."""
+    p = R / path
+    if not p.exists():
+        return f"WARN: {path} does not exist after write"
+    text = p.read_text(encoding="utf-8")
+    problems = []
+    if len(text) < MIN_BYTES.get(gate_num, 200):
+        problems.append(f"{len(text)} bytes < floor {MIN_BYTES.get(gate_num, 200)}")
+    if PLACEHOLDER_RE.search(text):
+        problems.append("contains unfilled [placeholder] brackets")
+    if text.count("[") != text.count("]"):
+        problems.append("unbalanced [ ] brackets")
+    if text.count("(") != text.count(")"):
+        problems.append("unbalanced ( ) parens")
+    return ("; ".join(problems)) if problems else None
 
 def run(gate_ref, status, task):
     slug = Path(status).parent.name
@@ -120,14 +139,20 @@ def run(gate_ref, status, task):
     # Ask the gate's questions directly; the model does not ask them.
     qs_text = "\n".join(f"{i}. {q}" for i, q in enumerate(qs, 1))
     print(f"\n=== Gate questions ({gate_ref}) ===\n{qs_text}\n", file=sys.stderr)
+    _gm = re.search(r"gate-(\d)", gate_ref)
+    hint = ""
+    if _gm and int(_gm.group(1)) >= 3:
+        hint = " (multi-line answer? use --answer-file with a '# gate-N' header)"
     try:
-        direct = get_answer("Your answer to all gate questions (one line, or blank to let the model ask): ").strip()
+        direct = get_answer(f"Your answer to all gate questions (one line, or blank to let the model ask){hint}: ").strip()
     except EOFError:
         direct = ""
     if direct:
         messages.append({"role": "assistant", "content": qs_text})
         messages.append({"role": "user", "content": direct})
         asked, no_tools = True, False
+    else:
+        asked, no_tools = False, False
     read_cache, call_counts = set(), {}
     asked = asked if 'asked' in dir() else False
     rejected_writes = 0
@@ -212,6 +237,14 @@ def run(gate_ref, status, task):
                 print(f"[tool] {name} -> {str(result)[:80]}...", file=sys.stderr)
                 messages.append({"role": "tool", "tool_name": name, "content": result})
                 if not result.startswith("REJECTED"):
+                    gnum = int(re.search(r"gate-(\d)", gate_ref).group(1)) if re.search(r"gate-(\d)", gate_ref) else 1
+                    warn = artifact_suspect(p, gnum)
+                    if warn:
+                        print(f"\n*** WARN: {p} {warn}. "
+                              f"Review before approving; the artifact may be truncated "
+                              f"or contain unfilled template content. ***\n",
+                              file=sys.stderr)
+                        return f"Wrote {p} (SUSPECT: {warn}). Gate artifact NOT confirmed complete."
                     return f"Wrote {p}. Gate artifact complete."
             else:
                 result = f"Unknown tool: {name}"
@@ -225,19 +258,24 @@ if __name__ == "__main__":
         idx = args.index("--answer-file")
         path = args[idx + 1]
         lines = Path(path).read_text(encoding="utf-8").splitlines()
-        expected = None
-        if lines and lines[0].startswith("#"):
-            m = re.match(r"#\s*gate-(\d)\b", lines[0].strip())
-            if not m:
-                print(f"ABORT: {path} header must be '# gate-N'. Got: {lines[0]!r}",
-                      file=sys.stderr)
-                sys.exit(2)
-            expected = int(m.group(1))
-            lines = lines[1:]
+        if not lines or not lines[0].startswith("#"):
+            print(f"ABORT: {path} must start with '# gate-N' on line 1.",
+                  file=sys.stderr)
+            sys.exit(2)
+        m = re.match(r"#\s*gate-(\d)\b", lines[0].strip())
+        if not m:
+            print(f"ABORT: {path} header must be '# gate-N'. Got: {lines[0]!r}",
+                  file=sys.stderr)
+            sys.exit(2)
+        expected = int(m.group(1))
+        lines = lines[1:]
         gate_arg = next((a for a in args if "gate-" in a), "")
         gm = re.search(r"gate-(\d)", gate_arg)
         actual = int(gm.group(1)) if gm else None
-        if expected is not None and actual is not None and expected != actual:
+        if actual is None:
+            print(f"ABORT: cannot determine gate from args: {args}", file=sys.stderr)
+            sys.exit(2)
+        if expected != actual:
             print(f"ABORT: answer file is for gate {expected}, "
                   f"but gate ref is gate {actual}.", file=sys.stderr)
             sys.exit(2)
