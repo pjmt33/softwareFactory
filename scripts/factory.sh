@@ -16,8 +16,8 @@ audit() {
   local fail=0
   hdr "scaffold"
   for p in SKILL.md references/status-template.md \
-           references/gate-1-product.md references/gate-2-architecture.md \
-           references/gate-3-program-design.md references/gate-4-vertical-slices.md \
+           references/gate-1-product.md references/gate-2-research.md \
+           references/gate-3-design-discussion.md references/gate-4-structure-outline.md \
            docs/plans docs/adr docs/external scripts; do
     require "$p" || fail=1
   done
@@ -26,14 +26,14 @@ audit() {
     while IFS= read -r d; do
       printf '\n  %s\n' "$d"
       [ -f "$d/00-status.md" ] || { red "    MISSING 00-status.md"; fail=1; }
-      for g in 01-product 02-architecture 03-program-design; do
+      for g in 01-product 02-research 03-design-discussion; do
         [ -f "$d/$g.md" ] || yellow "    missing $g.md (gate may not be reached)"
       done
       [ -f "$d/00-status.md" ] && grep -E '^(- )?(Gate|Slice|feature|gate-|slice-|next:)' "$d/00-status.md" | sed 's/^/    /'
       if [ -f "$d/00-status.md" ] &&
          grep -Eq '^- Gate 4 — Structure Outline: APPROVED([[:space:]]|$)' "$d/00-status.md"; then
-        [ -f "$d/04-slices.md" ] || {
-          red "    MISSING 04-slices.md (Gate 4 is approved)"
+        [ -f "$d/04-structure-outline.md" ] || {
+          red "    MISSING 04-structure-outline.md (Gate 4 is approved)"
           fail=1
         }
       fi
@@ -55,7 +55,7 @@ audit() {
   hdr "unchecked slices"
   open=0
   while IFS= read -r d; do
-    f="$d/04-slices.md"
+    f="$d/04-structure-outline.md"
     [ -f "$f" ] || continue
     n=$(grep -c '^- \[ \]' "$f" 2>/dev/null || true)
     if [ "${n:-0}" -gt 0 ]; then
