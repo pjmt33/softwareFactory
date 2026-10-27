@@ -1,6 +1,6 @@
 # Slices: audit visibility
 
-- [ ] Slice 1 — tracer bullet: add `hdr "unchecked slices"` to `audit()`,
+- [x] Slice 1 — tracer bullet: add `hdr "unchecked slices"` to `audit()`,
       with no loop; it always prints `  (none)` and exits 0. Test: run
       `scripts/factory.sh audit` and assert the output contains
       `== unchecked slices ==` followed by `  (none)`, exit code 0.
