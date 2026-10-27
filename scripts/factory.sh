@@ -52,6 +52,8 @@ audit() {
   else
     green "  clean"
   fi
+  hdr "unchecked slices"
+  echo "  (none)"
   hdr "ADR index"
   find docs/adr -maxdepth 1 -type f -name '[0-9][0-9][0-9][0-9]-*' 2>/dev/null | sort | sed 's/^/  /'
   hdr "skill hygiene"
