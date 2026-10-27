@@ -63,7 +63,9 @@ audit() {
       open=$((open+1))
     fi
   done < <(find docs/plans -mindepth 1 -maxdepth 1 -type d | sort)
-  [ "$open" -eq 0 ] && echo "  (none)"  hdr "ADR index"
+  [ "$open" -eq 0 ] && echo "  (none)"
+
+  hdr "ADR index"
   find docs/adr -maxdepth 1 -type f -name '[0-9][0-9][0-9][0-9]-*' 2>/dev/null | sort | sed 's/^/  /'
   hdr "skill hygiene"
   check_skill_inner || fail=1
