@@ -126,7 +126,6 @@ resume() {
     fi
   done < <(find docs/plans -mindepth 1 -maxdepth 1 -type d | sort)
   [ "$any" -eq 0 ] && echo "  (none)"
-  hdr "resume pointers"
   hdr "binding ADRs"
   find docs/adr -maxdepth 1 -type f -name '[0-9][0-9][0-9][0-9]-*' 2>/dev/null | sort | sed 's/^/  /'
   hdr "external refs (names only)"
