@@ -8,5 +8,5 @@ Validation: resume-next-gate has Gates 1-3 APPROVED, Gate 4 pending → output c
 ## Phase 2: Cleanup old status dumps
 Files: scripts/factory.sh
 Validation: resume output contains "== next gates ==" section; no raw "# Status:" dumps appear; audit still passes.
-- [ ] no raw "# Status:" in resume output
-- [ ] audit passes
+- [x] no raw "# Status:" in resume output
+- [x] audit passes
