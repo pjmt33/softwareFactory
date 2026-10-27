@@ -278,6 +278,68 @@ def run(gate_ref, status, task):
             messages.append({"role": "tool", "tool_name": name, "content": result})
     return "ERROR: max turns exceeded"
 
+def run_phase(plan_dir, phase_num):
+    import subprocess
+    outline = plan_dir / "04-structure-outline.md"
+    if not outline.exists():
+        return f"ABORT: {outline} not found"
+    block = extract_phase(outline.read_text(encoding="utf-8"), phase_num)
+    if block is None:
+        return f"ABORT: Phase {phase_num} not found"
+    first_line = block.split("\n", 1)[0]
+    if "\u2705" in first_line:
+        return f"REFUSED: Phase {phase_num} already marked complete"
+    boxes = re.findall(r"^- \[( |x)\]", block, re.M)
+    if boxes and all(b == "x" for b in boxes):
+        return f"REFUSED: Phase {phase_num} has all checkboxes [x]; already complete"
+    prompt = phase_prompt(block, plan_dir)
+    messages = [{"role": "user", "content": prompt}]
+    print(f"\n=== Implementing Phase {phase_num} in {plan_dir.name} ===\n", file=sys.stderr)
+    for turn in range(20):
+        print(f"\n--- Turn {turn+1} ---", file=sys.stderr)
+        msg = call(messages, tools=TOOLS).get("message", {})
+        if msg.get("thinking"):
+            print("[thinking] " + str(msg["thinking"])[:160], file=sys.stderr)
+        tcs = msg.get("tool_calls") or []
+        if not tcs:
+            content = msg.get("content", "").strip()
+            if content:
+                print(f"\n=== Phase {phase_num} complete ===\n{content}\n", file=sys.stderr)
+                try:
+                    ans = get_answer("Confirm to commit and proceed? (y/n): ").strip()
+                except EOFError:
+                    ans = "n"
+                if ans.lower() in ("y", "yes"):
+                    subprocess.run(["git", "add", "-A"], check=False)
+                    r = subprocess.run(["git", "commit", "-m", f"feat({plan_dir.name}): Phase {phase_num} complete"], capture_output=True, text=True)
+                    return f"Committed Phase {phase_num}: {r.stdout.strip() or r.stderr.strip()}"
+                return f"Phase {phase_num} not committed; feedback: {ans}"
+            messages.append({"role": "assistant", "content": content})
+            messages.append({"role": "user", "content": f"Continue implementing Phase {phase_num}. Use tools."})
+            continue
+        messages.append(msg)
+        for tc in tcs:
+            fn = tc.get("function", {})
+            name, args = fn.get("name"), fn.get("arguments", {})
+            if name == "read_file":
+                p2 = args.get("path", "").replace("<slug>", plan_dir.name)
+                f2 = (R / p2).resolve()
+                result = f2.read_text(encoding="utf-8") if f2.exists() else f"Error: file not found: {p2}"
+            elif name == "write_file":
+                p2 = args.get("path", "").replace("<slug>", plan_dir.name)
+                f2 = (R / p2).resolve()
+                if (R / ".git").resolve() in f2.parents:
+                    result = f"REJECTED: cannot write under .git/: {p2}"
+                else:
+                    f2.parent.mkdir(parents=True, exist_ok=True)
+                    f2.write_text(args.get("content", ""), encoding="utf-8")
+                    result = f"Wrote {len(args.get('content', ''))} bytes to {p2}"
+            else:
+                result = f"Unknown tool: {name}"
+            print(f"[tool] {name} -> {str(result)[:80]}...", file=sys.stderr)
+            messages.append({"role": "tool", "tool_name": name, "content": result})
+    return "ERROR: max turns exceeded"
+
 if __name__ == "__main__":
     args = sys.argv[1:]
     if "--phase" in args:
@@ -303,8 +365,11 @@ if __name__ == "__main__":
             print(f"=== Phase {phase_num} (dry run) ===")
             print(block)
             sys.exit(0)
-        print("run_phase not yet implemented; use --dry-run to inspect the phase", file=sys.stderr)
-        sys.exit(2)
+        if not probe():
+            print("ABORT: probe failed", file=sys.stderr)
+            sys.exit(2)
+        print("\n=== FINAL OUTPUT ===\n" + run_phase(plan_dir, phase_num))
+        sys.exit(0)
     if "--answer-file" in args:
         idx = args.index("--answer-file")
         path = args[idx + 1]
