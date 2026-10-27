@@ -304,12 +304,22 @@ def run_phase(plan_dir, phase_num):
         if not tcs:
             content = msg.get("content", "").strip()
             if content:
-                print(f"\n=== Phase {phase_num} complete ===\n{content}\n", file=sys.stderr)
+                updated = extract_phase(content, phase_num)
+                if updated:
+                    outline.write_text(
+                        outline.read_text(encoding="utf-8").replace(block, updated),
+                        encoding="utf-8",
+                    )
+                    print(f"[outline] updated 04-structure-outline.md with Phase {phase_num} progress", file=sys.stderr)
+                print(f"\n## Phase {phase_num} Complete\n\n**What was done:**\n{content}\n\n**Manual verification needed:**\n- see 04-structure-outline.md Validation section\n\nReady for Phase {phase_num + 1} when you confirm, or let me know if anything needs adjustment.\n", file=sys.stderr)
                 try:
-                    ans = get_answer("Confirm to commit and proceed? (y/n): ").strip()
+                    ans = get_answer("Confirm to commit and proceed? (y/n, or describe changes): ").strip()
                 except EOFError:
                     ans = "n"
                 if ans.lower() in ("y", "yes"):
+                    cur = outline.read_text(encoding="utf-8")
+                    cur = cur.replace(f"## Phase {phase_num}:", f"## \u2705 Phase {phase_num}:", 1)
+                    outline.write_text(cur, encoding="utf-8")
                     subprocess.run(["git", "add", "-A"], check=False)
                     r = subprocess.run(["git", "commit", "-m", f"feat({plan_dir.name}): Phase {phase_num} complete"], capture_output=True, text=True)
                     return f"Committed Phase {phase_num}: {r.stdout.strip() or r.stderr.strip()}"
