@@ -39,3 +39,7 @@
   harness-answer-file, harness-readme, _smoke-test) retain old gate labels
   and are not validated by the new Gate 4 check — historical record, no
   migration.
+- Phase engine (2966fcc, eb0ad17): `--phase N` extracts one phase from
+  04-structure-outline.md; `--dry-run` prints it without a model call;
+  `run_phase` implements one phase with a human gate (`y` commits, `n`
+  returns feedback); refuses if the phase title has ✅ or all checkboxes [x].
