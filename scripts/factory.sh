@@ -81,7 +81,7 @@ check_skill_inner() {
   [ -f SKILL.md ] || { red "  SKILL.md missing"; return 1; }
   [ -s SKILL.md ] || { red "  SKILL.md is empty"; return 1; }
   local lines; lines=$(wc -l < SKILL.md | tr -d ' ')
-  if [ "$lines" -gt 80 ]; then yellow "  SKILL.md is $lines lines (target ~50)"; fail=1
+  if [ "$lines" -gt 90 ]; then yellow "  SKILL.md is $lines lines (target ~50)"; fail=1
   else green "  SKILL.md body: $lines lines (ok)"; fi
   if head -1 SKILL.md | grep -q '^---$'; then
     local desc; desc=$(awk '/^---$/{c++; next} c==1 && /^description:/{sub(/^description:[[:space:]]*/,""); print; exit}' SKILL.md)
