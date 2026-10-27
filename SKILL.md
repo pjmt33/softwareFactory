@@ -8,15 +8,18 @@ description: Run a feature through a 4-gate approval workflow (Product, Architec
 Four gates. Stop at each until the user signs off. State lives in
 `docs/plans/<feature>/00-status.md` so any fresh session resumes from disk alone.
 
-## The four gates
-1. **Product** — `references/gate-1-product.md`. User problem, success metric,
+## The four gates (RPI-aligned)
+1. **Questions** — `references/gate-1-product.md`. User problem, success metric,
    announcement, plain HTML mockups. No tech talk.
-2. **Architecture** — `references/gate-2-architecture.md`. Endpoints, data,
-   query outlines, end-to-end flow, external names.
-3. **Program Design** — `references/gate-3-program-design.md`. File locations,
-   types and signatures (no bodies), call stack, test asserts, least confident decisions.
-4. **Vertical Slices** — `references/gate-4-vertical-slices.md`. Tracer bullet first,
-   then one testable slice at a time. Re-steer between slices.
+2. **Research** — `references/gate-2-research.md`. Current state only: files,
+   patterns, tests, dependencies. Do NOT propose designs or recommend changes.
+   **Do NOT read Gate 1 output** — research must be isolated from the ticket.
+3. **Design Discussion** — `references/gate-3-design-discussion.md`. Desired
+   state, 2–3 design choices with recommendations, resolved decisions. Reads
+   `02-research.md` only.
+4. **Structure Outline** — `references/gate-4-structure-outline.md`. Vertical
+   phases, each with one testable result. Reads `02-research.md` and
+   `03-design-discussion.md`. Precedence: outline > design discussion > research.
 
 ## Status file
 Copy `references/status-template.md` to `docs/plans/<slug>/00-status.md` before Gate 1.

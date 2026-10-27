@@ -62,10 +62,19 @@ def wf(path, content):
     f.write_text(content, encoding="utf-8")
     return f"Wrote {len(content)} bytes to {path}"
 
+# RPI isolation: research (Gate 2) must NOT see the ticket (Gate 1).
+RPI_READS = {
+    1: [],
+    2: [2],
+    3: [2],
+    4: [2, 3],
+}
+
 def prior_artifacts(status_path, gate_ref):
-    """Return prior approved artifacts for gates before the current one."""
+    """Return approved artifacts this gate is allowed to read (RPI isolation)."""
     m = re.search(r"gate-(\d)", gate_ref)
     n = int(m.group(1)) if m else 1
+    allowed = set(RPI_READS.get(n, []))
     d = (R / status_path).resolve().parent
     out = []
     for f in sorted(d.glob("0[1-9]-*.md")):
@@ -73,7 +82,7 @@ def prior_artifacts(status_path, gate_ref):
             gn = int(f.name[1])
         except ValueError:
             continue
-        if gn < n:
+        if gn in allowed:
             out.append(f"=== {f.name} ===\n{f.read_text(encoding='utf-8')}")
     return "\n\n".join(out)
 

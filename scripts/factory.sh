@@ -31,7 +31,7 @@ audit() {
       done
       [ -f "$d/00-status.md" ] && grep -E '^(- )?(Gate|Slice|feature|gate-|slice-|next:)' "$d/00-status.md" | sed 's/^/    /'
       if [ -f "$d/00-status.md" ] &&
-         grep -Eq '^- Gate 4 — Slice plan: APPROVED([[:space:]]|$)' "$d/00-status.md"; then
+         grep -Eq '^- Gate 4 — Structure Outline: APPROVED([[:space:]]|$)' "$d/00-status.md"; then
         [ -f "$d/04-slices.md" ] || {
           red "    MISSING 04-slices.md (Gate 4 is approved)"
           fail=1
@@ -87,10 +87,10 @@ check_skill_inner() {
     local desc; desc=$(awk '/^---$/{c++; next} c==1 && /^description:/{sub(/^description:[[:space:]]*/,""); print; exit}' SKILL.md)
     [ -n "$desc" ] && green "  description present" || { yellow "  frontmatter has no description"; fail=1; }
   else yellow "  no YAML frontmatter"; fail=1; fi
-  for g in gate-1-product gate-2-architecture gate-3-program-design gate-4-vertical-slices; do
+  for g in gate-1-product gate-2-research gate-3-design-discussion gate-4-structure-outline; do
     [ -s "references/$g.md" ] && green "  references/$g.md ok" || { yellow "  references/$g.md empty or missing"; fail=1; }
   done
-  for g in gate-1-product gate-2-architecture gate-3-program-design gate-4-vertical-slices; do
+  for g in gate-1-product gate-2-research gate-3-design-discussion gate-4-structure-outline; do
     grep -q "references/$g.md" SKILL.md || { yellow "  SKILL.md does not reference references/$g.md"; fail=1; }
   done
   return "$fail"

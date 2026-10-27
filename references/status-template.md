@@ -10,10 +10,10 @@ Slices are checkboxes; a slice is done when it has one commit, one test that
 failed before the change and passes after, and its box is checked.
 -->
 
-- Gate 1 — Product: pending
-- Gate 2 — Architecture: pending
-- Gate 3 — Program Design: pending
-- Gate 4 — Slice plan: pending
+- Gate 1 — Questions: pending
+- Gate 2 — Research: pending
+- Gate 3 — Design Discussion: pending
+- Gate 4 — Structure Outline: pending
 
 ## Slices
 - [ ] Slice 1 — tracer bullet: <one line>
