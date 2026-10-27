@@ -70,6 +70,9 @@ the current gate or describe what Gate N+1 will do.
   offer to record it as `docs/adr/NNNN-<slug>.md` — context, decision, consequences.
   Never rewrite old ADRs; supersede them. Names-only for anything outside the
   repo goes in `docs/external/`.
+- **Multi-line answers:** Gate 3 and later need multi-line input. Use
+  `harness.py … --answer-file <path>` with a `# gate-N` header; the interactive
+  prompt stops at the first newline and will silently truncate the artifact.
 
 ## Exempt
 Trivial tweaks (button color, copy edits, typos). If it fits in one commit and

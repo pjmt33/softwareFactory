@@ -89,8 +89,11 @@ git pull --rebase origin HEAD
 Pull between gates, not during one — a mid-gate rebase can conflict on
 `docs/plans/<slug>/00-status.md` if the remote changed it.
 
-Answer files are single-use. Optionally start the file with a `# gate-N`
-header; the harness aborts if the header does not match the gate reference.
+Answer files are single-use and must start with a `# gate-N` header on line 1
+(e.g. `# gate-3`). The harness aborts if the header is missing or does not
+match the gate reference. Use answer files for Gate 3 and later: those gates
+ask for multi-line content (signatures, snippets), and the interactive prompt
+reads only one line.
 
 ## Local agent diagnostics
 
