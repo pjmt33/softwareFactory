@@ -13,7 +13,7 @@ failed before the change and passes after, and its box is checked.
 - Gate 1 — Questions: APPROVED 2026-10-27
 - Gate 2 — Research: APPROVED 2026-10-27
 - Gate 3 — Design Discussion: APPROVED 2026-10-27
-- Gate 4 — Structure Outline: pending
+- Gate 4 — Structure Outline: APPROVED 2026-10-27
 
 ## Slices
 - [ ] Slice 1 — tracer bullet: <one line>
