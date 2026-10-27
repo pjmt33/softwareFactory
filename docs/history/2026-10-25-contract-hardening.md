@@ -33,3 +33,9 @@
   menu pipes
 - `_smoke-test` left as-is: intentional "do not advance" artifact; slug
   validator rejects leading underscore so it cannot be regenerated
+- RPI restructure (58ecce7): gates renamed to Questions/Research/Design
+  Discussion/Structure Outline; research isolated from ticket via
+  harness.RPI_READS. Existing plan dirs (first-feature, gate-preambles,
+  harness-answer-file, harness-readme, _smoke-test) retain old gate labels
+  and are not validated by the new Gate 4 check — historical record, no
+  migration.
