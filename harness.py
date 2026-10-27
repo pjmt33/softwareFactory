@@ -48,11 +48,10 @@ def gate_approved(status_text, gate_num):
     """True iff the specific gate line is APPROVED."""
     pat = re.compile(r"^- Gate\s+%d\b[^\n]*:\s*APPROVED(\s|$)" % gate_num, re.M)
     return bool(pat.search(status_text))
-
 def wf(path, content, plan_dir):
     f = (R / path).resolve()
     if f.parent.resolve() != plan_dir:
-        return f"REJECTED: writes must be in {plan_dir.relative_to(R)}; got {path}"
+        return f"REJECTED: writes must be in {plan_dir.relative_to(R)}; got {path}. Use path='{plan_dir.relative_to(R)}/{Path(path).name}' exactly."
     status = f.parent / "00-status.md"
     g = gate_of(f)
     if g and status.exists() and gate_approved(status.read_text(encoding="utf-8"), g):
