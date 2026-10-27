@@ -10,11 +10,11 @@ ANSWER_LINES = []  # populated by main() if --answer-file is given
 
 def get_answer(prompt):
     if ANSWER_LINES:
-        line = ANSWER_LINES.pop(0)
-        print(f"{prompt}{line}", file=sys.stderr)
+        line = "\n".join(ANSWER_LINES)
+        ANSWER_LINES.clear()
+        print(f"{prompt}{line[:80]}…", file=sys.stderr)
         return line
     return input(prompt)
-
 TOOLS = [
     {"type": "function", "function": {"name": "read_file", "description": "Read a file",
         "parameters": {"type": "object", "properties": {"path": {"type": "string"}}, "required": ["path"]}}},
@@ -49,11 +49,10 @@ def gate_approved(status_text, gate_num):
     pat = re.compile(r"^- Gate\s+%d\b[^\n]*:\s*APPROVED(\s|$)" % gate_num, re.M)
     return bool(pat.search(status_text))
 
-def wf(path, content):
+def wf(path, content, plan_dir):
     f = (R / path).resolve()
-    plans = (R / "docs" / "plans").resolve()
-    if plans not in f.parents:
-        return f"REJECTED: writes limited to docs/plans/. Got {path}"
+    if f.parent.resolve() != plan_dir:
+        return f"REJECTED: writes must be in {plan_dir.relative_to(R)}; got {path}"
     status = f.parent / "00-status.md"
     g = gate_of(f)
     if g and status.exists() and gate_approved(status.read_text(encoding="utf-8"), g):
@@ -85,7 +84,6 @@ def prior_artifacts(status_path, gate_ref):
         if gn in allowed:
             out.append(f"=== {f.name} ===\n{f.read_text(encoding='utf-8')}")
     return "\n\n".join(out)
-
 
 def gate_questions(ref_text):
     """Extract numbered questions ending in ? from the gate reference."""
@@ -242,7 +240,7 @@ def run(gate_ref, status, task):
                 read_cache.add(p)
             elif name == "write_file":
                 p = args.get("path", "").replace("<slug>", slug)
-                result = wf(p, args.get("content", ""))
+                result = wf(p, args.get("content", ""), Path(status).resolve().parent)
                 print(f"[tool] {name} -> {str(result)[:80]}...", file=sys.stderr)
                 messages.append({"role": "tool", "tool_name": name, "content": result})
                 if not result.startswith("REJECTED"):
