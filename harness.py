@@ -130,6 +130,26 @@ def artifact_suspect(path, gate_num):
         problems.append("unbalanced ( ) parens")
     return ("; ".join(problems)) if problems else None
 
+def extract_phase(outline_text, phase_num):
+    pattern = rf"^(## (?:✅ )?Phase {phase_num}:[^\n]*\n)(.*?)(?=^## (?:✅ )?Phase |\Z)"
+    m = re.search(pattern, outline_text, re.M | re.S)
+    return m.group(1) + m.group(2) if m else None
+
+def phase_prompt(phase_block, plan_dir):
+    """Build the implementer prompt for one phase, with precedence rule."""
+    slug = plan_dir.name
+    return (
+        f"You are implementing one phase from the structure outline.\n\n"
+        f"PRECEDENCE: structure outline > design discussion > research > ticket.\n"
+        f"When documents conflict, the structure outline wins.\n\n"
+        f"PHASE:\n{phase_block}\n\n"
+        f"COMPANION DOCUMENTS in {plan_dir.relative_to(R)}/:\n"
+        f"- 02-research.md\n- 03-design-discussion.md\n\n"
+        f"Implement ONLY this phase. Run every automated validation item.\n"
+        f"Mark a checkbox [x] only when that check passes. Leave manual items\n"
+        f"and the phase-title ✅ for human confirmation. Stop after this phase.\n"
+    )
+
 def run(gate_ref, status, task):
     slug = Path(status).parent.name
     qs = gate_questions(rf(gate_ref))
@@ -260,6 +280,31 @@ def run(gate_ref, status, task):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
+    if "--phase" in args:
+        idx = args.index("--phase")
+        phase_num = int(args[idx + 1])
+        del args[idx:idx + 2]
+        dry_run = "--dry-run" in args
+        if dry_run:
+            args.remove("--dry-run")
+        if len(args) < 1:
+            print("Usage: harness.py --phase N <status> [--dry-run]", file=sys.stderr)
+            sys.exit(1)
+        plan_dir = (R / args[0]).resolve().parent
+        outline = plan_dir / "04-structure-outline.md"
+        if not outline.exists():
+            print(f"ABORT: {outline} not found", file=sys.stderr)
+            sys.exit(2)
+        block = extract_phase(outline.read_text(encoding="utf-8"), phase_num)
+        if block is None:
+            print(f"ABORT: Phase {phase_num} not found in {outline}", file=sys.stderr)
+            sys.exit(2)
+        if dry_run:
+            print(f"=== Phase {phase_num} (dry run) ===")
+            print(block)
+            sys.exit(0)
+        print("run_phase not yet implemented; use --dry-run to inspect the phase", file=sys.stderr)
+        sys.exit(2)
     if "--answer-file" in args:
         idx = args.index("--answer-file")
         path = args[idx + 1]
