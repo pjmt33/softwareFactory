@@ -112,6 +112,20 @@ init_feature() {
 }
 
 resume() {
+  hdr "next gates"
+  any=0
+  while IFS= read -r d; do
+    slug=$(basename "$d")
+    case "$slug" in _*) continue;; esac
+    line=$(grep -E '^- Gate [1-4] — [^:]+: (pending|in progress|INVALIDATED)' "$d/00-status.md" 2>/dev/null | head -1)
+    if [ -n "$line" ]; then
+      gn=$(printf '%s' "$line" | sed -E 's/^- Gate ([1-4]).*/\1/')
+      lbl=$(printf '%s' "$line" | sed -E 's/^- Gate [1-4] — ([^:]+):.*/\1/')
+      printf '  %s: next -> Gate %s (%s)\n' "$slug" "$gn" "$lbl"
+      any=1
+    fi
+  done < <(find docs/plans -mindepth 1 -maxdepth 1 -type d | sort)
+  [ "$any" -eq 0 ] && echo "  (none)"
   hdr "resume pointers"
   find docs/plans -type f -name 00-status.md -exec sh -c 'echo "--- $1"; cat "$1"' _ {} \; 2>/dev/null || echo "  no plans yet"
   hdr "binding ADRs"
