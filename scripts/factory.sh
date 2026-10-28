@@ -112,6 +112,8 @@ init_feature() {
 }
 
 resume() {
+  local all=0
+  [ "${1:-}" = "--all" ] && all=1
   hdr "next gates"
   any=0
   while IFS= read -r d; do
@@ -126,6 +128,16 @@ resume() {
     fi
   done < <(find docs/plans -mindepth 1 -maxdepth 1 -type d | sort)
   [ "$any" -eq 0 ] && echo "  (none)"
+  if [ "$all" -eq 1 ]; then
+    while IFS= read -r d; do
+      slug=$(basename "$d")
+      case "$slug" in _*) continue;; esac
+      if [ -f "$d/00-status.md" ] &&
+         ! grep -Eq '^- Gate [1-4] — [^:]+: (pending|in progress|INVALIDATED)' "$d/00-status.md" 2>/dev/null; then
+        printf '  %s: all gates approved\n' "$slug"
+      fi
+    done < <(find docs/plans -mindepth 1 -maxdepth 1 -type d | sort)
+  fi
   hdr "binding ADRs"
   find docs/adr -maxdepth 1 -type f -name '[0-9][0-9][0-9][0-9]-*' 2>/dev/null | sort | sed 's/^/  /'
   hdr "external refs (names only)"
@@ -146,6 +158,6 @@ case "$cmd" in
     exit "$rc"
     ;;
   init-feature) init_feature "${1:-}" ;;
-  resume)       resume ;;
+  resume)       resume "$@" ;;
   *) echo "usage: factory.sh {audit|check-skill|init-feature <slug>|resume}"; exit 2 ;;
 esac
