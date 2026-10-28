@@ -21,6 +21,9 @@ TOOLS = [
     {"type": "function", "function": {"name": "write_file", "description": "Write a file",
         "parameters": {"type": "object", "properties": {"path": {"type": "string"}, "content": {"type": "string"}},
                        "required": ["path", "content"]}}},
+    {"type": "function", "function": {"name": "edit_file", "description": "Replace exactly one occurrence of `old` with `new` in a file. Use this for surgical edits; write_file rewrites the whole file.",
+        "parameters": {"type": "object", "properties": {"path": {"type": "string"}, "old": {"type": "string"}, "new": {"type": "string"}},
+                       "required": ["path", "old", "new"]}}},
 ]
 
 def call(messages, tools=None):
@@ -286,6 +289,10 @@ def run_phase(plan_dir, phase_num):
     block = extract_phase(outline.read_text(encoding="utf-8"), phase_num)
     if block is None:
         return f"ABORT: Phase {phase_num} not found"
+    if "Files:" not in block:
+        return f"REFUSED: Phase {phase_num} has no Files: line"
+    if not re.search(r"^- \[ \]", block, re.M):
+        return f"REFUSED: Phase {phase_num} has no unchecked checkboxes"
     first_line = block.split("\n", 1)[0]
     if "\u2705" in first_line:
         return f"REFUSED: Phase {phase_num} already marked complete"
@@ -304,6 +311,14 @@ def run_phase(plan_dir, phase_num):
         if not tcs:
             content = msg.get("content", "").strip()
             if content:
+                # Parent-owned verification: run backtick-quoted commands from Validation.
+                val_m = re.search(r"^Validation:\s*(.+?)(?=^- \[|\Z)", block, re.M | re.S)
+                if val_m:
+                    for cmd in re.findall(r"`([^`]+)`", val_m.group(1)):
+                        r = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=str(R))
+                        if r.returncode != 0:
+                            msg = "REFUSED: Phase " + str(phase_num) + " validation failed: " + repr(cmd) + " (exit " + str(r.returncode) + ")" + chr(10) + r.stdout + r.stderr
+                            return msg
                 updated = extract_phase(content, phase_num)
                 if updated:
                     outline.write_text(
@@ -344,6 +359,21 @@ def run_phase(plan_dir, phase_num):
                     f2.parent.mkdir(parents=True, exist_ok=True)
                     f2.write_text(args.get("content", ""), encoding="utf-8")
                     result = f"Wrote {len(args.get('content', ''))} bytes to {p2}"
+            elif name == "edit_file":
+                p2 = args.get("path", "").replace("<slug>", plan_dir.name)
+                f2 = (R / p2).resolve()
+                old_s = args.get("old", "")
+                new_s = args.get("new", "")
+                if not f2.exists():
+                    result = f"Error: {p2} not found"
+                elif old_s not in f2.read_text(encoding="utf-8"):
+                    result = f"REJECTED: old text not found in {p2}"
+                elif f2.read_text(encoding="utf-8").count(old_s) != 1:
+                    result = f"REJECTED: old text found multiple times in {p2}; must be exactly 1"
+                else:
+                    cur = f2.read_text(encoding="utf-8")
+                    f2.write_text(cur.replace(old_s, new_s), encoding="utf-8")
+                    result = f"Edited {p2}: replaced 1 occurrence"
             else:
                 result = f"Unknown tool: {name}"
             print(f"[tool] {name} -> {str(result)[:80]}...", file=sys.stderr)
