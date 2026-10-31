@@ -41,6 +41,12 @@ audit() {
          grep -Eq '^- Gate [1-4] — [^:]+: INVALIDATED' "$d/00-status.md" 2>/dev/null; then
         yellow "    gate INVALIDATED — re-approve before continuing"
       fi
+      if [ -f "$d/04-structure-outline.md" ]; then
+        grep -q '^## Phase ' "$d/04-structure-outline.md" || {
+          red "    04-structure-outline.md has no '## Phase N:' headers"
+          fail=1
+        }
+      fi
     done < <(find docs/plans -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
   else
     echo "  (no feature plans yet)"
