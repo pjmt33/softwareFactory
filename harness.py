@@ -336,7 +336,7 @@ def run_phase(plan_dir, phase_num):
                     cur = outline.read_text(encoding="utf-8")
                     cur = cur.replace(f"## Phase {phase_num}:", f"## \u2705 Phase {phase_num}:", 1)
                     outline.write_text(cur, encoding="utf-8")
-                    subprocess.run(["git", "add", "-A"], check=False)
+                    subprocess.run(["git", "add", "scripts/", "docs/plans/" + plan_dir.name + "/"], check=False)
                     r = subprocess.run(["git", "commit", "-m", f"feat({plan_dir.name}): Phase {phase_num} complete"], capture_output=True, text=True)
                     return f"Committed Phase {phase_num}: {r.stdout.strip() or r.stderr.strip()}"
                 return f"Phase {phase_num} not committed; feedback: {ans}"
