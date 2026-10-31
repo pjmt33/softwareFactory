@@ -316,6 +316,7 @@ def run_phase(plan_dir, phase_num):
                 if val_m:
                     for cmd in re.findall(r"`([^`]+)`", val_m.group(1)):
                         r = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=str(R))
+                        print(f"[verify] passed: {cmd}" if r.returncode == 0 else f"[verify] FAILED: {cmd}", file=sys.stderr)
                         if r.returncode != 0:
                             msg = "REFUSED: Phase " + str(phase_num) + " validation failed: " + repr(cmd) + " (exit " + str(r.returncode) + ")" + chr(10) + r.stdout + r.stderr
                             return msg
