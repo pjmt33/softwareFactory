@@ -22,7 +22,7 @@ def inventory():
             continue
         open_gate = next((g for g in gates if not g[2].startswith("APPROVED")), None)
         if open_gate:
-            rows.append(f"<li>{d.name}: next -&gt; Gate {open_gate[0]} ({open_gate[1]})</li>")
+            rows.append(f"<li>{d.name}: next -> Gate {open_gate[0]} ({open_gate[1]})</li>")
         else:
             rows.append(f"<li>{d.name}: all gates approved</li>")
     return "<ul>\n" + "\n".join(rows) + "\n</ul>"
