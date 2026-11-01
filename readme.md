@@ -1,7 +1,7 @@
 # Software Factory — local, test-build posture
 
-A 4-gate feature workflow (Product -> Architecture -> Program Design -> Vertical
-Slices) implemented as a SKILL.md-compatible skill. State lives in
+A 4-gate feature workflow (Questions -> Research -> Design Discussion -> Structure Outline)
+ implemented as a SKILL.md-compatible skill. State lives in
 `docs/plans/<feature>/00-status.md` so any fresh session can resume from disk
 alone.
 
@@ -23,7 +23,7 @@ alone.
 
     scripts/factory.sh resume
     scripts/factory.sh init-feature <slug>
-    python3 harness.py references/gate-2-architecture.md docs/plans/<slug>/00-status.md "Gate 2 is pending."
+    python3 harness.py references/gate-2-research.md docs/plans/<slug>/00-status.md "Gate 2 is pending. The slug is <slug>."
 
 Commands, the resume contract, gate approval, and the harness sandbox are all
 documented in [MANUAL.md](MANUAL.md) and [SKILL.md](SKILL.md). This file does

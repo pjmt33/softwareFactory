@@ -15,13 +15,13 @@ Use the four gates in order for substantial features:
    [references/gate-1-product.md](references/gate-1-product.md) before drafting.
 2. **Architecture** — inspect the existing code and document fit, endpoints,
    data, flow, and external dependencies in
-   [references/gate-2-architecture.md](references/gate-2-architecture.md).
+   [references/gate-2-research.md](references/gate-2-research.md).
 3. **Program Design** — specify changed files, types and signatures, call stack,
    tests, and exactly three least-confident decisions in
-   [references/gate-3-program-design.md](references/gate-3-program-design.md).
+   [references/gate-3-design-discussion.md](references/gate-3-design-discussion.md).
 4. **Vertical Slices** — document the ordered, end-to-end slices in one
    `04-slices.md` file, then implement and verify one slice at a time using
-   [references/gate-4-vertical-slices.md](references/gate-4-vertical-slices.md).
+   [references/gate-4-structure-outline.md](references/gate-4-structure-outline.md).
 
 At each gate, write the artifact, summarize its decisions, and stop for the
 approval prompt specified in `SKILL.md`. Do not begin implementation before the
@@ -143,10 +143,10 @@ instructions, follow the skill and gate references and update the manual.
 
 Run the harness with the gate reference, the feature's status file, and the task:
 
-    python3 harness.py references/gate-2-architecture.md docs/plans/<slug>/00-status.md "Gate 2 is pending. The slug is <slug>. Ask the gate's questions before writing."
+    python3 harness.py references/gate-2-research.md docs/plans/<slug>/00-status.md "Gate 2 is pending. The slug is <slug>. Ask the gate's questions before writing."
 
 To read answers from a file instead of typing:
 
-    python3 harness.py references/gate-2-architecture.md docs/plans/<slug>/00-status.md "..." --answer-file answers.txt
+    python3 harness.py references/gate-2-research.md docs/plans/<slug>/00-status.md "..." --answer-file answers.txt
 
 Approval is manual: edit docs/plans/<slug>/00-status.md after reviewing the artifact.
