@@ -1,0 +1,19 @@
+- Files (grouped by purpose, paths only)
+  - Implementation: scripts/factory.sh, harness.py
+  - Config: docs/plans/*/00-status.md, docs/plans/*/04-structure-outline.md, references/status-template.md
+  - Tests: none automated; manual verification of resume --all on 6 plans, audit passes, phase engine verified on scratch plans
+- Patterns (with file:line references)
+  - factory.sh resume --all outputs state messages (scripts/factory.sh:XX)
+  - 00-status.md lines match ^- Gate [1-4] — [^:]+: STATE (docs/plans/*/00-status.md:XX)
+  - 04-structure-outline.md uses ## Phase N: headers and - [ ] checkboxes (docs/plans/*/04-structure-outline.md:XX)
+  - No JSON output or HTTP server (patterns across files)
+- Test coverage (what exists, what's asserted)
+  - No automated tests for factory.sh/harness.py
+  - resume --all manually verified for 6 plans (no assertions defined)
+  - audit passes (no assertions defined)
+  - phase engine verified on scratch plans (no assertions defined)
+- Dependencies (names only)
+  - None external; webUI would add Flask/http.server as new dependencies
+- Open questions
+  - Manual test coverage scope and criteria
+  - Phase engine verification details without JSON
