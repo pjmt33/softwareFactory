@@ -354,7 +354,9 @@ def run_phase(plan_dir, phase_num):
             elif name == "write_file":
                 p2 = args.get("path", "").replace("<slug>", plan_dir.name)
                 f2 = (R / p2).resolve()
-                if (R / ".git").resolve() in f2.parents:
+                if f2.parent.resolve() not in (plan_dir.resolve(), (R / "scripts").resolve()):
+                    result = f"REJECTED: writes must be in {plan_dir.relative_to(R)} or scripts/; got {p2}"
+                elif (R / ".git").resolve() in f2.parents:
                     result = f"REJECTED: cannot write under .git/: {p2}"
                 else:
                     f2.parent.mkdir(parents=True, exist_ok=True)
