@@ -42,7 +42,7 @@ audit() {
         yellow "    gate INVALIDATED — re-approve before continuing"
       fi
       if [ -f "$d/04-structure-outline.md" ]; then
-        grep -q '^## Phase ' "$d/04-structure-outline.md" || {
+        grep -qE '^## (✅ )?Phase ' "$d/04-structure-outline.md" || {
           red "    04-structure-outline.md has no '## Phase N:' headers"
           fail=1
         }
